@@ -1,0 +1,412 @@
+{
+  "metadata": {
+    "title": "zh-TW Personalization SxS Evaluation",
+    "version": "1.0",
+    "locale": "zh-TW",
+    "synthetic": true,
+    "created_at": "2026-08-12",
+    "primary_dimensions": ["grounding", "integration", "helpfulness"],
+    "data_hygiene": {
+      "source_data": "synthetic_and_anonymized",
+      "evaluation_conversations": "delete_after_scoring",
+      "debug_snapshots": "retain_only_case_ids_and_source_ids"
+    },
+    "note": "All identities, messages, searches, viewing activity, prompts, and responses are synthetic. No personal Google account data is included."
+  },
+  "weights": {
+    "grounding": 25,
+    "integration": 20,
+    "helpfulness": 20,
+    "naturalness": 15,
+    "personalization_restraint": 10,
+    "source_traceability": 10
+  },
+  "cases": [
+    {
+      "id": "PERS-001",
+      "category": "forced_connection",
+      "sources": [
+        {
+          "source_id": "Y1",
+          "type": "youtube_activity",
+          "timestamp": "2026-08-05",
+          "content": "觀看《東京三天兩夜散步路線》，停留 11 分鐘。"
+        },
+        {
+          "source_id": "C1",
+          "type": "chat_summary",
+          "timestamp": "2026-08-08",
+          "content": "使用者說近期需要控制支出，暫時沒有出國計畫。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "週末想找個不用花太多錢的地方走走。"},
+        {"turn_id": "T2", "role": "assistant", "content": "你想待在台北，還是可以安排近郊一日來回？"},
+        {"turn_id": "T3", "role": "user", "content": "台北市內就好。"}
+      ],
+      "response_a": "你最近在看東京旅遊影片，應該很想去日本；不如把這週末當成東京行前練習，去西門町逛日系商店。",
+      "response_b": "如果要控制預算又留在台北市內，可以走大稻埕河濱或象山步道；兩個行程都能以捷運抵達。你比較想散步看風景，還是逛街？",
+      "scores": {
+        "A": {"grounding": 4, "integration": 4, "helpfulness": 4, "naturalness": 3, "personalization_restraint": 2, "source_traceability": 4},
+        "B": {"grounding": 5, "integration": 4, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5}
+      },
+      "expected_winner": "B",
+      "turn_references": ["T3"],
+      "source_references": ["Y1", "C1"],
+      "failure_tags": {"A": ["forced_connection", "intent_overreach"], "B": []},
+      "rationale_zh": "B 較佳。T1 要求低預算、T3 明確限定台北市內，B 直接整合這兩個限制並提供可執行選項。A 雖使用 Y1 的東京影片紀錄，卻把『看過影片』推論成『準備赴日』，也忽略 C1 的暫不出國資訊；這是有來源但連結牽強的錯誤個人化。",
+      "debug_check": {
+        "A": {"claimed_sources": ["Y1"], "verified_sources": ["Y1"], "issues": ["Y1 does not support travel intent"]},
+        "B": {"claimed_sources": ["C1"], "verified_sources": ["C1"], "issues": []}
+      },
+      "feedback_zh": "只在個人紀錄能直接支持當前意圖時使用；觀看內容不等於購買、旅行或身份意圖。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-002",
+      "category": "sensitive_inference",
+      "sources": [
+        {
+          "source_id": "S1",
+          "type": "search_history",
+          "timestamp": "2026-08-09",
+          "content": "搜尋『偏頭痛怎麼陪伴家人』與『看診前要記錄什麼』。"
+        },
+        {
+          "source_id": "G1",
+          "type": "gmail",
+          "timestamp": "2026-08-09",
+          "content": "妹妹來信：謝謝你陪我整理偏頭痛就診問題。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "幫我安排今晚比較放鬆的行程。"}
+      ],
+      "response_a": "如果想放鬆，可以安排 20 分鐘散步、洗熱水澡，再留一段不看螢幕的時間。你想要在家休息，還是外出走走？",
+      "response_b": "考量你最近偏頭痛，今晚應避免外出，關燈休息並提早睡覺最適合你。",
+      "scores": {
+        "A": {"grounding": 5, "integration": 4, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5},
+        "B": {"grounding": 2, "integration": 3, "helpfulness": 4, "naturalness": 4, "personalization_restraint": 1, "source_traceability": 3}
+      },
+      "expected_winner": "A",
+      "turn_references": ["T1"],
+      "source_references": ["S1", "G1"],
+      "failure_tags": {"A": [], "B": ["sensitive_inference", "identity_misattribution"]},
+      "rationale_zh": "A 較佳。T1 沒有提到健康狀況，A 提供低風險選項並以問題確認偏好。B 把 S1 的搜尋直接歸因為使用者本人偏頭痛，但 G1 明確指出就診者是妹妹；因此 B 不只做出敏感健康推論，也把他人的狀況錯套到使用者身上。",
+      "debug_check": {
+        "A": {"claimed_sources": [], "verified_sources": [], "issues": []},
+        "B": {"claimed_sources": ["S1"], "verified_sources": ["S1", "G1"], "issues": ["ignored identity evidence in G1"]}
+      },
+      "feedback_zh": "健康搜尋不得自動轉換為本人診斷；必須核對主體，且非必要時不要主動揭露敏感推論。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-003",
+      "category": "stale_preference",
+      "sources": [
+        {
+          "source_id": "C2",
+          "type": "chat_summary",
+          "timestamp": "2025-11-20",
+          "content": "使用者偏好深焙黑咖啡。"
+        },
+        {
+          "source_id": "G2",
+          "type": "gmail",
+          "timestamp": "2026-08-10",
+          "content": "使用者寄給朋友：最近晚上不喝咖啡因，改喝無咖啡因飲品。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "晚上讀書想喝點東西，有什麼建議？"},
+        {"turn_id": "T2", "role": "assistant", "content": "想要提神，還是希望不影響睡眠？"},
+        {"turn_id": "T3", "role": "user", "content": "不要影響睡眠。"}
+      ],
+      "response_a": "你一直喜歡深焙黑咖啡，可以點一杯小杯深焙；份量少一點應該不太影響睡眠。",
+      "response_b": "你在 T3 說不想影響睡眠，可以選無咖啡因咖啡、國寶茶或熱牛奶。若你仍喜歡咖啡風味，無咖啡因咖啡會最接近原本習慣。",
+      "scores": {
+        "A": {"grounding": 3, "integration": 3, "helpfulness": 4, "naturalness": 4, "personalization_restraint": 3, "source_traceability": 4},
+        "B": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5}
+      },
+      "expected_winner": "B",
+      "turn_references": ["T3"],
+      "source_references": ["C2", "G2"],
+      "failure_tags": {"A": ["stale_preference", "recency_failure"], "B": []},
+      "rationale_zh": "B 較佳。T3 的當前限制與 G2 的近期偏好一致，B 因此提供無咖啡因選項，同時只把舊有咖啡喜好當作風味參考。A 只採用較舊的 C2，忽略 G2 與 T3，並自行保證少量咖啡不影響睡眠；這是來源新舊權重錯誤。",
+      "debug_check": {
+        "A": {"claimed_sources": ["C2"], "verified_sources": ["C2"], "issues": ["newer source G2 omitted"]},
+        "B": {"claimed_sources": ["C2", "G2"], "verified_sources": ["C2", "G2"], "issues": []}
+      },
+      "feedback_zh": "偏好衝突時優先採用當前輪次與較新來源，並避免把舊偏好描述成永久不變。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-004",
+      "category": "source_conflict",
+      "sources": [
+        {
+          "source_id": "C3",
+          "type": "chat_summary",
+          "timestamp": "2026-07-15",
+          "content": "使用者計畫 8 月 20 日參加台中研討會。"
+        },
+        {
+          "source_id": "G3",
+          "type": "gmail",
+          "timestamp": "2026-08-11",
+          "content": "主辦單位通知：台中研討會延期至 9 月 3 日。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "幫我整理下週四去台中的行前清單。"}
+      ],
+      "response_a": "我看到原先的研討會日期是 8 月 20 日，但較新的主辦單位 Email 已改為 9 月 3 日。你說的『下週四』是仍有其他台中行程，還是要準備延期後的研討會？確認後我再列清單。",
+      "response_b": "沒問題，8 月 20 日研討會的行前清單：報到 QR code、名片、筆電、充電器與車票。",
+      "scores": {
+        "A": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 4, "personalization_restraint": 5, "source_traceability": 5},
+        "B": {"grounding": 4, "integration": 3, "helpfulness": 4, "naturalness": 4, "personalization_restraint": 4, "source_traceability": 3}
+      },
+      "expected_winner": "A",
+      "turn_references": ["T1"],
+      "source_references": ["C3", "G3"],
+      "failure_tags": {"A": [], "B": ["source_conflict_ignored", "stale_event_date"]},
+      "rationale_zh": "A 較佳。T1 的『下週四』與來源日期存在歧義；A 同時整合 C3 舊計畫與 G3 最新延期通知，先釐清再行動。B 的清單本身合理，但直接沿用 C3 的舊日期、完全未處理 G3，因此可能為已延期活動產生錯誤準備。",
+      "debug_check": {
+        "A": {"claimed_sources": ["C3", "G3"], "verified_sources": ["C3", "G3"], "issues": []},
+        "B": {"claimed_sources": ["C3"], "verified_sources": ["C3", "G3"], "issues": ["newer conflicting source not surfaced"]}
+      },
+      "feedback_zh": "遇到來源衝突時呈現衝突與時間順序，不能安靜地選一個來源繼續回答。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-005",
+      "category": "overnarration",
+      "sources": [
+        {
+          "source_id": "G4",
+          "type": "gmail",
+          "timestamp": "2026-08-07",
+          "content": "餐廳訂位確認：週五 19:00，兩位，備註紀念日。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "幫我寫一段週五下班前的提醒，叫我別太晚離開公司。"},
+        {"turn_id": "T2", "role": "assistant", "content": "你希望幾點收到提醒？"},
+        {"turn_id": "T3", "role": "user", "content": "五點半。"}
+      ],
+      "response_a": "提醒文字：『17:30 該離開公司了。你 19:00 和伴侶有兩人紀念日晚餐訂位，所以別加班，也記得帶禮物，避免讓對方失望。』",
+      "response_b": "提醒文字：『17:30 該準備離開公司了，記得替晚上的行程預留交通時間。』",
+      "scores": {
+        "A": {"grounding": 5, "integration": 5, "helpfulness": 4, "naturalness": 2, "personalization_restraint": 2, "source_traceability": 5},
+        "B": {"grounding": 5, "integration": 4, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5}
+      },
+      "expected_winner": "B",
+      "turn_references": ["T3"],
+      "source_references": ["G4"],
+      "failure_tags": {"A": ["overnarration", "relationship_inference", "unnecessary_disclosure"], "B": []},
+      "rationale_zh": "B 略優。兩者都正確承接 T3 的 17:30，且使用 G4 推知晚間有行程。B 只保留有用的交通緩衝；A 則主動說出訂位時間、推論對象是伴侶，又加入『帶禮物、避免失望』等無來源判斷。A 並非事實錯誤，而是個人化過度、語氣令人不適。",
+      "debug_check": {
+        "A": {"claimed_sources": ["G4"], "verified_sources": ["G4"], "issues": ["partner identity and gift advice are unsupported"]},
+        "B": {"claimed_sources": ["G4"], "verified_sources": ["G4"], "issues": []}
+      },
+      "feedback_zh": "使用最低必要個人資訊；相關不代表都要說出口，也不要把紀念日自動推論成伴侶關係。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-006",
+      "category": "missed_personalization",
+      "sources": [
+        {
+          "source_id": "C4",
+          "type": "chat_summary",
+          "timestamp": "2026-08-01",
+          "content": "使用者沒有汽車，日常以捷運與步行移動。"
+        },
+        {
+          "source_id": "S2",
+          "type": "search_history",
+          "timestamp": "2026-08-11",
+          "content": "搜尋『淡水下雨室內景點』。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "明天下雨的話，淡水還有什麼適合半日遊？"},
+        {"turn_id": "T2", "role": "assistant", "content": "你比較喜歡展覽、老街，還是咖啡店？"},
+        {"turn_id": "T3", "role": "user", "content": "展覽，交通不要太麻煩。"}
+      ],
+      "response_a": "可以優先找捷運淡水站步行範圍內的室內展館，再搭配附近室內空間休息。這類路線符合 T3 的展覽偏好，也不需要開車；出發前再確認展期與營業時間。",
+      "response_b": "推薦自駕到淡水，先找停車場，再去漁人碼頭和老街；下雨時開車最方便。",
+      "scores": {
+        "A": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5},
+        "B": {"grounding": 5, "integration": 1, "helpfulness": 3, "naturalness": 4, "personalization_restraint": 5, "source_traceability": 3}
+      },
+      "expected_winner": "A",
+      "turn_references": ["T3"],
+      "source_references": ["C4", "S2"],
+      "failure_tags": {"A": [], "B": ["personal_context_ignored", "request_constraint_missed"]},
+      "rationale_zh": "A 較佳。A 同時使用 T3 的展覽與交通限制、C4 的無車背景，以及 S2 的雨天淡水意圖，形成低摩擦路線並保留營業資訊的不確定性。B 的建議單獨看來合理，卻忽略使用者沒有汽車，也偏離 T3 指定的展覽需求，屬於個人化不足。",
+      "debug_check": {
+        "A": {"claimed_sources": ["C4", "S2"], "verified_sources": ["C4", "S2"], "issues": []},
+        "B": {"claimed_sources": [], "verified_sources": [], "issues": ["relevant available context C4 and S2 not used"]}
+      },
+      "feedback_zh": "個人化也包含避免不適用選項；應優先整合會實際改變建議的交通與限制資訊。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-007",
+      "category": "identity_binding",
+      "sources": [
+        {
+          "source_id": "G5",
+          "type": "gmail",
+          "timestamp": "2026-08-10",
+          "content": "母親來信：我的膝蓋不方便久走，家庭聚餐請找電梯方便的地方。"
+        },
+        {
+          "source_id": "C5",
+          "type": "chat_summary",
+          "timestamp": "2026-08-06",
+          "content": "使用者每週跑步三次，偏好步行探索街區。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "這週日我自己想去走走，排一個兩小時的戶外行程。"}
+      ],
+      "response_a": "考量你膝蓋不方便久走，建議全程搭計程車，找有電梯的商場短暫逛逛。",
+      "response_b": "你這次是自己出門，而且平常有跑步習慣，可以安排約兩小時的河濱步行；我會把路線控制在可隨時搭捷運離開的區段。若膝蓋限制其實也適用於你，告訴我再調整。",
+      "scores": {
+        "A": {"grounding": 2, "integration": 2, "helpfulness": 3, "naturalness": 4, "personalization_restraint": 1, "source_traceability": 2},
+        "B": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5}
+      },
+      "expected_winner": "B",
+      "turn_references": ["T1"],
+      "source_references": ["G5", "C5"],
+      "failure_tags": {"A": ["identity_binding_error", "third_party_attribute_transfer"], "B": []},
+      "rationale_zh": "B 較佳。T1 說明是使用者獨自出門，C5 也支持其步行能力；B 依此提出戶外路線，並用條件句處理不確定性。A 把 G5 中母親的膝蓋狀況轉移到使用者本人，還把戶外行程改成商場，造成身份綁定與需求遵循雙重錯誤。",
+      "debug_check": {
+        "A": {"claimed_sources": ["G5"], "verified_sources": ["G5"], "issues": ["attribute belongs to mother, not user"]},
+        "B": {"claimed_sources": ["C5"], "verified_sources": ["C5", "G5"], "issues": []}
+      },
+      "feedback_zh": "所有人物屬性都必須保留主體；家庭成員資訊不得自動成為使用者資訊。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-008",
+      "category": "debug_source_mismatch",
+      "sources": [
+        {
+          "source_id": "G6",
+          "type": "gmail",
+          "timestamp": "2026-08-10",
+          "content": "電子票券：8 月 16 日 14:00 電影，信義影城。"
+        },
+        {
+          "source_id": "S3",
+          "type": "search_history",
+          "timestamp": "2026-08-11",
+          "content": "搜尋『信義區電影後晚餐』。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "週日下午電影結束後，幫我排一個簡單行程。"}
+      ],
+      "response_a": "你的電影在信義影城 14:00 開始；若約 16:30 結束，可以先在附近散步，再安排 17:30 左右吃晚餐。片長未提供，所以時間需要以實際散場為準。",
+      "response_b": "電影 14:00 開始，散場後直接去信義區吃晚餐最順。Debug Info 顯示我使用了 Gmail 票券、搜尋紀錄與你過往偏好的義大利餐廳。",
+      "scores": {
+        "A": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 4, "personalization_restraint": 5, "source_traceability": 5},
+        "B": {"grounding": 4, "integration": 4, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 2}
+      },
+      "expected_winner": "A",
+      "turn_references": ["T1"],
+      "source_references": ["G6", "S3"],
+      "failure_tags": {"A": [], "B": ["debug_source_mismatch", "invented_preference_source"]},
+      "rationale_zh": "A 較佳。兩者都正確整合 G6、S3 與 T1 的電影後行程要求，因此表面內容差異不大；關鍵在 Debug Info。B 宣稱還使用了『過往偏好的義大利餐廳』，但來源集中沒有該資料，屬於來源追蹤不實。A 則清楚標示未提供片長，讓推論邊界可驗證。",
+      "debug_check": {
+        "A": {"claimed_sources": ["G6", "S3"], "verified_sources": ["G6", "S3"], "issues": []},
+        "B": {"claimed_sources": ["G6", "S3", "C_missing"], "verified_sources": ["G6", "S3"], "issues": ["C_missing is not present in source bundle"]}
+      },
+      "feedback_zh": "Debug Info 必須逐一對應實際來源 ID；不得用看似合理的偏好補足不存在的來源。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-009",
+      "category": "subtle_naturalness",
+      "sources": [
+        {
+          "source_id": "C6",
+          "type": "chat_summary",
+          "timestamp": "2026-08-02",
+          "content": "使用者準備財政學期中考，偏好 25 分鐘專注、5 分鐘休息。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "今晚八點到十點幫我排讀書節奏。"},
+        {"turn_id": "T2", "role": "assistant", "content": "今晚要讀哪一科？"},
+        {"turn_id": "T3", "role": "user", "content": "財政學，最後留一點時間整理錯題。"}
+      ],
+      "response_a": "依照你慣用的番茄鐘，20:00–20:25 複習重點、休息 5 分鐘；20:30–20:55 做題、休息 5 分鐘；21:00–21:25 複習弱點、休息 5 分鐘；21:30–22:00 整理錯題。這完美符合你的學習人格。",
+      "response_b": "照你習慣的 25/5 節奏：20:00–20:25 複習重點，20:30–20:55 做題，21:00–21:25 檢查不熟的觀念；21:30–22:00 留給錯題整理。中間各休息 5 分鐘即可。",
+      "scores": {
+        "A": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 4, "personalization_restraint": 5, "source_traceability": 5},
+        "B": {"grounding": 5, "integration": 5, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5}
+      },
+      "expected_winner": "B",
+      "turn_references": ["T3"],
+      "source_references": ["C6"],
+      "failure_tags": {"A": ["minor_overnarration"], "B": []},
+      "rationale_zh": "B 略優。兩者都正確使用 C6 的 25/5 偏好，也回應 T3 的錯題整理要求，內容實用性幾乎相同。差異出在 A 最後的『完美符合你的學習人格』：這句把單一習慣擴張成人格描述，既不必要也不自然；B 保留相同個人化價值而沒有過度敘述。",
+      "debug_check": {
+        "A": {"claimed_sources": ["C6"], "verified_sources": ["C6"], "issues": ["learning personality is unsupported"]},
+        "B": {"claimed_sources": ["C6"], "verified_sources": ["C6"], "issues": []}
+      },
+      "feedback_zh": "當兩個回答都正確時，優先選擇個人化恰到好處、沒有將行為誇大成人格的版本。",
+      "cleanup_required": true
+    },
+    {
+      "id": "PERS-010",
+      "category": "multi_source_overfitting",
+      "sources": [
+        {
+          "source_id": "C7",
+          "type": "chat_summary",
+          "timestamp": "2026-08-04",
+          "content": "使用者喜歡安靜、座位寬敞的咖啡店。"
+        },
+        {
+          "source_id": "Y2",
+          "type": "youtube_activity",
+          "timestamp": "2026-08-10",
+          "content": "觀看兩支手沖咖啡教學。"
+        },
+        {
+          "source_id": "S4",
+          "type": "search_history",
+          "timestamp": "2026-08-11",
+          "content": "搜尋『台北車站附近插座咖啡店』。"
+        }
+      ],
+      "conversation": [
+        {"turn_id": "T1", "role": "user", "content": "明天下午要在台北車站附近工作兩小時，幫我想選店條件。"},
+        {"turn_id": "T2", "role": "assistant", "content": "除了安靜之外，有一定要插座或不限時嗎？"},
+        {"turn_id": "T3", "role": "user", "content": "一定要插座，時間限制沒關係。"}
+      ],
+      "response_a": "優先篩選台北車站步行範圍、確定有插座、下午不過度吵雜且座位能放筆電的店。T3 已說時間限制沒關係，所以不限時不是必要條件；出發前再確認插座與低消規則。",
+      "response_b": "你喜歡安靜寬敞、最近又迷上手沖，因此應找有插座、提供單品手沖、木質裝潢、播放爵士樂，而且不限時的台北車站咖啡店。",
+      "scores": {
+        "A": {"grounding": 5, "integration": 4, "helpfulness": 5, "naturalness": 5, "personalization_restraint": 5, "source_traceability": 5},
+        "B": {"grounding": 3, "integration": 5, "helpfulness": 4, "naturalness": 3, "personalization_restraint": 2, "source_traceability": 4}
+      },
+      "expected_winner": "A",
+      "turn_references": ["T3"],
+      "source_references": ["C7", "Y2", "S4"],
+      "failure_tags": {"A": [], "B": ["forced_multi_source_integration", "unsupported_preferences"]},
+      "rationale_zh": "A 較佳。A 使用 C7、S4 與 T3 中會實際改變選店結果的安靜、地點、插座條件，並正確排除不限時。B 看似整合更多來源，卻把 Y2 的教學觀看推成『迷上手沖』，再憑空增加木質裝潢與爵士樂；來源數量較多不代表整合品質較好。",
+      "debug_check": {
+        "A": {"claimed_sources": ["C7", "S4"], "verified_sources": ["C7", "S4"], "issues": []},
+        "B": {"claimed_sources": ["C7", "Y2", "S4"], "verified_sources": ["C7", "Y2", "S4"], "issues": ["decor and music preferences are unsupported"]}
+      },
+      "feedback_zh": "只整合會改善當前答案的來源；避免為了顯示個人化而把所有可用資料硬塞進回答。",
+      "cleanup_required": true
+    }
+  ]
+}
