@@ -1,0 +1,306 @@
+{
+  "metadata": {
+    "schema_version": "gemini-zh-semantic-audit-v1",
+    "locale": "zh-TW",
+    "focus": "Traditional Chinese semantic understanding",
+    "input_prompts": "synthetic_evaluation_prompts",
+    "output_evidence": "archived_real_inference_artifacts",
+    "provider_attribution": {
+      "confirmed_provider": "Gemini API",
+      "confirmed_scope": "structured_query_frame_outputs_from_direct_gemini_runner",
+      "exact_model_id": "not_recorded_in_artifacts",
+      "end_to_end_reply_attribution": "system_output_not_direct_provider_quote",
+      "claim_boundary_zh": "Query Frame 實測程式明確要求 GEMINI_API_KEY 並直接建立 Gemini client，因此結構化抽取結果可歸因為 Gemini API。保存的報告沒有記錄精確 model ID，所以本作品不猜測版本。端到端回覆可能包含 deterministic renderer、檢索與路由結果，只標示為系統輸出，不冒充 Gemini 原文。"
+    },
+    "privacy": {
+      "real_customer_data": false,
+      "production_customer_messages": false,
+      "merchant_identity_published": false,
+      "source_prompt_type": "synthetic_test_cases",
+      "transformation": "Only the minimum fields required for semantic diagnosis were retained."
+    },
+    "language_policy": {
+      "primary": "Traditional Chinese",
+      "english": "one concise conclusion per case"
+    }
+  },
+  "sources": [
+    {
+      "source_id": "SRC-QF-INITIAL",
+      "artifact": "service-query-frame-stability-30x3.json",
+      "generated_at": "2026-07-20T02:26:56.935Z",
+      "sha256": "48c9ae51bc36b5fe13bbbd69cd95e186888a8168398128bb75883b603e133edf",
+      "direct_gemini_runner": true,
+      "attribution_zh": "直接 Gemini Query Frame 實測；30 題各跑 3 次。"
+    },
+    {
+      "source_id": "SRC-QF-CANONICAL",
+      "artifact": "service-query-frame-stability-30x3-after-canonical-prompt.json",
+      "generated_at": "2026-07-20T02:35:15.098Z",
+      "sha256": "c99c53fafa6bf5902aeccfdebb5c95fa1f72cb732970fe012a40b199407cde49",
+      "direct_gemini_runner": true,
+      "attribution_zh": "調整 canonical prompt 後的直接 Gemini Query Frame 實測。"
+    },
+    {
+      "source_id": "SRC-QF-FULL-V2",
+      "artifact": "service-query-frame-live-all-96-v2-final.json",
+      "generated_at": "2026-07-20T06:54:31.768Z",
+      "sha256": "599f59536c3033d2b19205db298bd4084adda063fb148014e3664cdb92650704",
+      "direct_gemini_runner": true,
+      "attribution_zh": "Query Frame v2 的 96 題直接 Gemini API 實測。"
+    },
+    {
+      "source_id": "SRC-QF-STABLE-V2",
+      "artifact": "service-query-frame-stability-30x3-v2-final.json",
+      "generated_at": "2026-07-20T06:56:02.946Z",
+      "sha256": "b8f69ffc921782e9ed4b4ab7a5b2e5acfbadd66340fba24ad75d26a97f59cfdd",
+      "direct_gemini_runner": true,
+      "attribution_zh": "Query Frame v2 最終 30 題、每題 3 次的穩定性實測。"
+    },
+    {
+      "source_id": "SRC-IG-E2E",
+      "artifact": "ig-service-knowledge-live-96-final.json",
+      "generated_at": "2026-07-20T05:40:31.512Z",
+      "sha256": "c9a3642a88258ee88ef82af429ce128d59f0219fa16addccc018db6fdcbdb94d",
+      "direct_gemini_runner": false,
+      "attribution_zh": "端到端 IG 測試報告；含 Query Frame、檢索、路由與 deterministic renderer，回覆文字不視為 Gemini 原文。"
+    }
+  ],
+  "iteration_evidence": [
+    {
+      "stage": "initial_30x3",
+      "source_id": "SRC-QF-INITIAL",
+      "total_runs": 90,
+      "valid_runs": 27,
+      "exact_frame_runs": 15,
+      "core_semantic_runs": 27
+    },
+    {
+      "stage": "canonical_prompt_30x3",
+      "source_id": "SRC-QF-CANONICAL",
+      "total_runs": 90,
+      "valid_runs": 72,
+      "exact_frame_runs": 45,
+      "core_semantic_runs": 63
+    },
+    {
+      "stage": "final_v2_30x3",
+      "source_id": "SRC-QF-STABLE-V2",
+      "total_runs": 90,
+      "valid_runs": 90,
+      "exact_frame_runs": 90,
+      "core_semantic_runs": 90
+    },
+    {
+      "stage": "final_v2_full_96",
+      "source_id": "SRC-QF-FULL-V2",
+      "total_runs": 96,
+      "valid_runs": 96,
+      "exact_frame_runs": 86,
+      "core_semantic_runs": 96
+    }
+  ],
+  "product_gate": {
+    "source_id": "SRC-IG-E2E",
+    "verdict": "NO-GO",
+    "total_cases": 96,
+    "customer_visible_replies": 46,
+    "silent_cases": 50,
+    "answerable_cases": 34,
+    "answerable_replied": 26,
+    "qualifier_coverage_leaks": 5,
+    "interpretation_zh": "結構化抽取變好不等於產品可上線。端到端仍有可回答卻沉默、條件例外覆蓋不足與回答語用問題。"
+  },
+  "cases": [
+    {
+      "id": "ZH-SEM-001",
+      "source_id": "SRC-QF-FULL-V2",
+      "source_case_id": "REC-006",
+      "evidence_level": "confirmed_gemini_structured_output",
+      "diagnosis_layer": "model_extraction",
+      "failure_type": "negation_polarity_reversal",
+      "severity": "high",
+      "input_zh": "我喜歡奶味重一點、咖啡不要太搶，有哪杯？",
+      "context_zh": "",
+      "expected_semantics": {
+        "linguistic_meaning_zh": "偏好奶味明顯，而且咖啡感不要主導；「不要太搶」是降低咖啡強度的限制。",
+        "required_evidence": [
+          "recommendation:milk_forward",
+          "recommendation:low_coffee_intensity"
+        ],
+        "archived_expected_frame": {
+          "preferenceKeys": [
+            "milk_forward",
+            "creamy"
+          ]
+        }
+      },
+      "observed_output": {
+        "status": "valid",
+        "frame": {
+          "preferenceKeys": [
+            "milk_forward",
+            "coffee_forward"
+          ]
+        },
+        "latency_ms": 593,
+        "input_tokens": 7513,
+        "output_tokens": 39
+      },
+      "analysis_zh": "Gemini 正確抓到「奶味重」，卻把「咖啡不要太搶」抽成 coffee_forward，將否定與程度限制翻成相反方向。更值得注意的是，當時的 archived expected frame 也只用 creamy 近似，沒有完整表示 low_coffee_intensity；因此這一案同時揭露模型的極性錯誤與標註架構的表達缺口。若直接用該 frame 推薦，結果可能正好違反使用者口味。",
+      "conclusion_en": "Gemini reversed a negative coffee-intensity preference into coffee-forward, which could invert the recommendation.",
+      "remediation_zh": "把正向偏好與負向限制分開建模，例如保留 low_coffee_intensity；新增否定、雙重條件與程度副詞的對比測試，不能只驗證 domain/property/risk。"
+    },
+    {
+      "id": "ZH-SEM-002",
+      "source_id": "SRC-QF-CANONICAL",
+      "source_case_id": "CTX-007",
+      "evidence_level": "confirmed_gemini_structured_output",
+      "diagnosis_layer": "model_extraction",
+      "failure_type": "discourse_context_overridden_by_lexical_trigger",
+      "severity": "high",
+      "input_zh": "那酒精的也算嗎？",
+      "context_zh": "上一輪主題是外帶飲品折 30 元，這一輪在追問酒精飲品是否也適用。",
+      "expected_semantics": {
+        "domain": "store_policy",
+        "property": "policy",
+        "topic": "takeout_discount",
+        "reference": "previous_turn",
+        "risk": "read_only"
+      },
+      "observed_output": {
+        "repeat_count": 3,
+        "same_error_each_run": true,
+        "frame": {
+          "domain": "safety",
+          "objectType": "SafetyClaim",
+          "property": "safety",
+          "topic": "alcohol",
+          "reference": "previous_turn",
+          "risk": "safety_sensitive"
+        }
+      },
+      "analysis_zh": "模型有辨識到這是上一輪追問，卻被「酒精」這個表面詞彙拉向安全領域，忽略真正承接的是外帶折扣規則。三次執行都得到相同錯誤，顯示它不是隨機格式波動，而是穩定的語篇綁定失敗。中文的「那……也算嗎」依賴前文才能決定「算」的是折扣、低消或其他規則，不能只靠當輪關鍵字分類。",
+      "conclusion_en": "The model noticed a prior-turn reference but let the word alcohol override the active discount context.",
+      "remediation_zh": "將前一輪受控 topic 與 object 名稱作為 server context 提供，並加入「那 X 也算嗎」跨領域最小對比組；評分時分開檢查 reference 正確與 domain 綁定正確。"
+    },
+    {
+      "id": "ZH-SEM-003",
+      "source_id": "SRC-QF-INITIAL",
+      "source_case_id": "CHO-003",
+      "evidence_level": "confirmed_gemini_structured_output",
+      "diagnosis_layer": "model_extraction",
+      "failure_type": "attribute_misread_as_entity",
+      "severity": "medium",
+      "input_zh": "如果我沒選焙度，你們會預設哪一個？",
+      "context_zh": "問題承接上一輪的飲品選項；「焙度」是屬性，不是商品名稱。",
+      "expected_semantics": {
+        "objectMention": "",
+        "property": "default",
+        "optionGroupKey": "roast",
+        "reference": "previous_turn"
+      },
+      "observed_output": {
+        "repeat_count": 3,
+        "same_error_each_run": true,
+        "frame": {
+          "objectType": "Product",
+          "objectMention": "焙度",
+          "property": "default",
+          "optionGroupKey": "roast",
+          "reference": "explicit"
+        },
+        "later_v2_result": "3/3 exact after bounded-context and schema revisions"
+      },
+      "analysis_zh": "Gemini 三次都把屬性詞「焙度」塞進 Product 的 objectMention，並把需要承接前文的問題標成 explicit。這會讓下游把「焙度」當成商品查詢，造成找不到物件或答非所問。後續版本透過受控前文與更嚴格 schema 達到 3/3 正確；這證明改善來自系統約束，而不是宣稱模型自然就懂了。",
+      "conclusion_en": "Gemini repeatedly treated a roast attribute as a product entity and lost the prior-turn reference.",
+      "remediation_zh": "在 schema 明確區分 entity mention 與 option-group attribute；server 注入前一輪物件，並以三次以上重跑驗證指涉穩定性。"
+    },
+    {
+      "id": "ZH-SEM-004",
+      "source_id": "SRC-IG-E2E",
+      "source_case_id": "CUS-003",
+      "evidence_level": "end_to_end_system_output",
+      "diagnosis_layer": "semantic_representation",
+      "failure_type": "coordinated_question_slot_loss",
+      "severity": "high",
+      "input_zh": "拿鐵可以換燕麥奶嗎？要加價嗎？",
+      "context_zh": "",
+      "expected_semantics": {
+        "requested_slots": [
+          "milk_substitution.allowed",
+          "milk_substitution.surcharge"
+        ]
+      },
+      "observed_output": {
+        "frame": {
+          "property": "compatibility",
+          "topic": "milk_substitution",
+          "objectMention": "拿鐵"
+        },
+        "reply_zh": "我想先幫你對準品項，免得介紹錯：你是指「原味拿鐵」，還是「風味拿鐵」？",
+        "dropped_slot": "milk_substitution.surcharge"
+      },
+      "analysis_zh": "這個複句包含兩個必須同時處理的子問題：能不能換，以及要不要加價。保存的 frame 只表達 compatibility，回覆則轉去釐清拿鐵品項，完全沒有保留 surcharge。這不宜單純歸咎模型，因為當時 Query Frame 本身只容納單一 property；真正根因是中文協調問句被壓成一個槽位，端到端驗證才揭露資訊遺失。",
+      "conclusion_en": "The frame captured substitution compatibility but dropped the surcharge question from the coordinated request.",
+      "remediation_zh": "允許受控 requestedSlots 或拆解 multi_request，並要求每個明問子句都能對應到證據、釐清或轉接結果；不能只看主題分類通過。"
+    },
+    {
+      "id": "ZH-SEM-005",
+      "source_id": "SRC-IG-E2E",
+      "source_case_id": "VIS-006",
+      "evidence_level": "end_to_end_system_output",
+      "diagnosis_layer": "evidence_coverage",
+      "failure_type": "modifier_and_wh_focus_loss",
+      "severity": "high",
+      "input_zh": "帶大型犬去可以坐哪裡？",
+      "context_zh": "",
+      "expected_semantics": {
+        "required_qualifiers": [
+          "pet_size_limit",
+          "pet_seating_area"
+        ],
+        "question_focus": "seating_location"
+      },
+      "observed_output": {
+        "frame": {
+          "domain": "store_policy",
+          "topic": "pet",
+          "property": "policy"
+        },
+        "returned_evidence": "generic pet floor rule",
+        "reply_zh": "可以，店家的規則我幫你整理成一句：寵物可以落地，但請勿影響他人。"
+      },
+      "analysis_zh": "回答命中「寵物」主題，卻同時漏掉限定詞「大型犬」與疑問焦點「坐哪裡」。它回的是寵物能否落地，並沒有回答體型限制或座位區域。這是典型的 topic 命中但 qualifier coverage 不完整：檢索到真實規則仍可能答錯問題，因此不能以有 evidence 或 frame exact 當作通過。",
+      "conclusion_en": "A generic pet rule ignored both the large-dog modifier and the seating-location question.",
+      "remediation_zh": "把使用者明問的尺寸與座位條件編成 qualifierKeys；只有 published evidence 完整覆蓋全部條件才回答，否則明確釐清或轉真人。"
+    },
+    {
+      "id": "ZH-SEM-006",
+      "source_id": "SRC-IG-E2E",
+      "source_case_id": "CPT-002",
+      "evidence_level": "end_to_end_system_output",
+      "diagnosis_layer": "answer_realization",
+      "failure_type": "yes_no_polarity_not_answered_directly",
+      "severity": "medium",
+      "input_zh": "淺焙是不是一定都很酸？",
+      "context_zh": "",
+      "expected_semantics": {
+        "direct_answer_zh": "不一定。",
+        "supporting_points": [
+          "淺焙常較容易呈現明亮酸質",
+          "實際風味受豆種、產區、處理法與沖煮影響",
+          "酸質不等於令人不舒服的酸味"
+        ]
+      },
+      "observed_output": {
+        "frame_status": "valid",
+        "reply_zh": "可以，這個概念抓住下面幾個重點就很好懂：「淺焙」通常較容易呈現明亮酸質、花果香與原豆特色。實際風味也會受豆種、產區、處理法、配方與沖煮方式影響。",
+        "missing_direct_polarity": true
+      },
+      "analysis_zh": "內容提供了正確的變因，卻用「可以」起頭，也沒有直接說出「不一定」。對中文的是非問句而言，使用者先要確認命題成立與否，再需要原因。這一案的 frame 已正確，問題出在回答實現層；若只評 grounding 或 evidence 數量會誤判通過，但真人會感覺模型沒有正面回答。",
+      "conclusion_en": "The evidence was relevant, but the response never directly answered the yes-or-no proposition.",
+      "remediation_zh": "回答計畫先輸出最短極性結論，再補充條件與範圍；加入是非問句的 directness 檢查，不讓「有解釋」取代「有回答」。"
+    }
+  ]
+}
