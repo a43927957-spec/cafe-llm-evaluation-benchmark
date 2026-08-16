@@ -146,11 +146,3 @@ AI 協助資料整理、程式碼、格式與英文校訂；案例判讀、證�
 ## English summary（AI-assisted）
 
 This portfolio audits real archived Gemini API evaluation outputs with synthetic Traditional Chinese prompts. It identifies failures in negation, discourse reference, entity typing, coordinated questions, qualifier coverage, and direct answer realization. The exact Gemini model ID was not recorded, and end-to-end system replies are not presented as direct Gemini quotes.
-
-## 作者
-
-為 [@a43927957-spec](https://github.com/a43927957-spec) 整理的公開求職作品。主要工作語言為繁體中文（台灣），關注 LLM 評估、中文語意品質、grounding 與可追溯的產品 gate。
-
-## 授權
-
-MIT，詳見 [LICENSE](LICENSE)。
