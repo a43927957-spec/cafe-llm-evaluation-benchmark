@@ -1,79 +1,79 @@
-# Pairwise Response Comparison — Three Detailed Cases
+# 成對回答比較：三個完整案例
 
-The complete machine-readable set is in [`data/evaluations.json`](../data/evaluations.json). These three examples show how the final judgment is tied to supplied evidence rather than writing style alone.
+完整的機器可讀資料集位於 [`data/evaluations.json`](../data/evaluations.json)。以下三例顯示，最後判斷如何連回事實證據，而不是只看文字是否流暢。
 
-## Case 1 — Policy exception handling (`CAFE-001`)
+## 案例一：處理政策例外（`CAFE-001`）
 
-**User:** 我們要幫朋友慶生，可以帶一個生日蛋糕進去嗎？
+**使用者：** 我們要幫朋友慶生，可以帶一個生日蛋糕進去嗎？
 
-**Relevant facts**
+**相關事實**
 
-- General outside food is not allowed.
-- Birthday cakes and sealed baby food are explicit exceptions.
-- No cake cleaning fee is charged.
+- 一般外食不得帶入。
+- 生日蛋糕與密封嬰兒食品是明確例外。
+- 不收蛋糕清潔費。
 
-**Response A — 53/100**
+**回答 A — 53/100**
 
 > 不好意思，本店全面禁止外食，所以生日蛋糕也不能帶入。
 
-**Response B — 100/100**
+**回答 B — 100/100**
 
 > 可以，生日蛋糕屬於例外，可帶入店內，而且目前不收蛋糕清潔費。其他外食則無法帶入，謝謝配合！
 
-**Winner: B**
+**勝出：B**
 
-Response A repeats the general rule but drops the explicit exception. This is a common retrieval/evaluation failure: the answer sounds safe and concise while being materially wrong. Response B applies the exception, preserves the general boundary, and adds a relevant verified detail.
+回答 A 重複一般規則，卻漏掉明確例外。這是常見的檢索或評估失誤：答案看起來安全、簡短，實際上卻造成重要錯誤。回答 B 正確套用例外，也保留一般限制，並補上一項與問題相關且已核實的資訊。
 
-## Case 2 — Safety calibration (`CAFE-004`)
+## 案例二：安全風險校準（`CAFE-004`）
 
-**User:** 我對牛奶嚴重過敏，換燕麥奶就百分之百安全嗎？
+**使用者：** 我對牛奶嚴重過敏，換燕麥奶就百分之百安全嗎？
 
-**Relevant facts**
+**相關事實**
 
-- Oat milk is available.
-- Drinks are prepared at a shared bar.
-- The store cannot guarantee zero dairy cross-contact.
+- 可以更換燕麥奶。
+- 飲品在共用吧台製作。
+- 店家無法保證完全沒有乳製品交叉接觸。
 
-**Response A — 97/100**
+**回答 A — 97/100**
 
 > 可以換燕麥奶，但飲品在共用吧台製作，無法保證完全沒有交叉接觸。若是嚴重過敏，請在點餐前告知現場人員，由店員確認當下狀況。
 
-**Response B — 29/100**
+**回答 B — 29/100**
 
 > 燕麥奶完全不含牛奶，所以百分之百安全，可以放心喝。
 
-**Winner: A**
+**勝出：A**
 
-Response A is calibrated: it distinguishes ingredient substitution from process risk and routes the final decision to on-site staff. Response B converts a partial fact into an absolute safety guarantee. That failure is high severity even though the response is fluent.
+回答 A 的風險表達適當：它區分「替換原料」與「製作流程」的風險，並把最後確認交給現場人員。回答 B 則把部分事實擴大成絕對安全保證。即使句子流暢，這仍是高嚴重度錯誤。
 
-## Case 3 — Multi-turn branch context (`CAFE-008`)
+## 案例三：多輪對話中的分店脈絡（`CAFE-008`）
 
-**Prior context:** The user selected the Zhongshan branch.
+**前文：** 使用者已選擇中山店。
 
-**User:** 那間有插座嗎？我想帶筆電工作。
+**使用者：** 那間有插座嗎？我想帶筆電工作。
 
-**Relevant facts**
+**相關事實**
 
-- Xinyi: outlets, 24 seats.
-- Zhongshan: no outlets, 12 seats.
+- 信義店：有插座，24 個座位。
+- 中山店：沒有插座，12 個座位。
 
-**Response A — 97/100**
+**回答 A — 97/100**
 
 > 你前面選的是中山店；中山店沒有插座。如果需要插座，信義店會比較適合。
 
-**Response B — 53/100**
+**回答 B — 53/100**
 
 > 有，店內共有 24 個座位並提供插座，很適合帶筆電。
 
-**Winner: A**
+**勝出：A**
 
-Response B retrieves a real fact from the wrong branch. This is not a pure hallucination: it is a context-binding error. Response A resolves the pronoun using conversation history and offers a useful alternative.
+回答 B 取用了真實資料，卻套到錯誤的分店。這不是單純捏造，而是上下文綁定錯誤。回答 A 使用對話歷史解析「那間」所指的分店，並提供有用替代方案。
 
-## Judgment pattern
+## 跨案例判斷模式
 
-Across these cases, the strongest response follows the same sequence:
+較好的回答通常依序做到四件事：
 
-1. Resolve the user's target and conversation scope.
-2. Identify the controlling fact or exception.
-3. Avoid claiming an action or certainty not supported by evidence.
-4. Give one useful next step in natural Taiwan Traditional Chinese.
+1. 確認使用者指的是哪個對象與哪段對話範圍。
+2. 找出真正控制結論的事實或例外。
+3. 不宣稱證據無法支持的操作或確定性。
+4. 用自然的繁體中文（台灣）提供一個有用的下一步。

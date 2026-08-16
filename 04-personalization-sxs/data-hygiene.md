@@ -1,29 +1,29 @@
-# Data Hygiene Protocol
+# 資料清理流程
 
-This portfolio uses only synthetic sources. The protocol below demonstrates the cleanup boundary that would apply to a real personalization evaluation environment.
+這份作品只使用合成來源。以下流程展示在真實個人化評估環境中應遵守的資料邊界。
 
-## Before evaluation
+## 評估前
 
-- Work from an isolated evaluation conversation.
-- Replace names, email addresses, phone numbers, account IDs, locations, and booking references with synthetic values.
-- Assign case-local source IDs instead of retaining account identifiers.
-- Capture only the minimum source excerpt required for the judgment.
-- Confirm that no unrelated personal content is present in screenshots, exports, or notes.
+- 使用隔離的評估對話。
+- 將姓名、電子郵件、電話、帳號 ID、地點與訂位編號替換為合成資料。
+- 使用案例內的來源 ID，不保留帳號識別資訊。
+- 每個來源只截取判斷所需的最少內容。
+- 確認截圖、匯出檔與筆記中沒有無關的個人內容。
 
-## During evaluation
+## 評估中
 
-- Do not paste source content into third-party tools outside the approved evaluation environment.
-- Keep evaluator notes tied to case IDs, turn IDs, and source IDs.
-- Do not infer health, identity, relationships, or intent when the source does not explicitly establish them.
-- Separate the visible response judgment from the Debug Info verification.
+- 不把來源內容貼到核准評估環境之外的第三方工具。
+- 讓評估筆記只連到案例 ID、輪次 ID 與來源 ID。
+- 來源未明確證明時，不推論健康、身分、關係或意圖。
+- 把可見回答的品質判斷與 `Debug Info` 核對分開進行。
 
-## After evaluation
+## 評估後
 
-- Delete the evaluation conversation so it cannot affect later personalization tests.
-- Delete temporary screenshots and raw exports.
-- Retain only the anonymized case, dimension scores, rationale, issue tags, and source-ID verification result.
-- Confirm `cleanup_required: true` for every case and record completion in the run log.
+- 刪除評估對話，避免影響後續個人化測試。
+- 刪除暫存截圖與原始匯出檔。
+- 只保留匿名案例、維度分數、判斷理由、問題標籤與來源 ID 核對結果。
+- 確認每個案例都有 `cleanup_required: true`，並在執行紀錄標記已完成。
 
-## Portfolio boundary
+## 作品資料邊界
 
-The committed dataset is fully synthetic and contains no real Gemini, Gmail, Google Search, YouTube, employer, merchant, customer, or personal account data.
+提交到倉庫的資料全部為合成內容，不包含任何真實的 Gemini、Gmail、Google Search、YouTube、雇主、店家、顧客或個人帳號資料。

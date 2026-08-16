@@ -1,117 +1,117 @@
-# Evaluation Rubrics
+# 評分規則
 
-Each candidate response receives a 1-5 rating on six dimensions. The weighted total is:
+每個候選回答都會在六個維度獲得 1 至 5 分。加權總分的計算方式為：
 
 ```text
-weighted total = sum(dimension score / 5 x dimension weight)
+加權總分 = sum（維度分數 / 5 x 維度權重）
 ```
 
-The result is a score from 20 to 100. Numbers support consistent review; the written rationale and cited evidence remain the primary judgment.
+最後分數介於 20 至 100。數字用來維持一致性；書面理由與引用的證據才是主要判斷依據。
 
-## Track 1 - Personalization SxS
+## 評估軌一：個人化回答 SxS
 
-### 1. Grounding - 25%
+### 1. 事實依據（Grounding）— 25%
 
-- **5:** Every statement about the user is supported by a named source or conversation turn, with correct subject and time.
-- **4:** Supported overall, with one low-impact assumption.
-- **3:** The response combines evidence with a meaningful unsupported inference.
-- **2:** A central personal claim is weakly supported, assigned to the wrong person, or stale.
-- **1:** The central personalization is fabricated or contradicts the available evidence.
+- **5 分：** 每個關於使用者的敘述都有具名來源或對話輪次支持，而且對象與時間正確。
+- **4 分：** 整體有依據，僅有一個影響很小的假設。
+- **3 分：** 在證據之外加入一個會影響判斷、但沒有支持的推論。
+- **2 分：** 核心個人敘述證據薄弱、套到錯的人，或使用過時資料。
+- **1 分：** 核心個人化內容是捏造的，或與可用證據矛盾。
 
-### 2. Integration - 20%
+### 2. 整合品質（Integration）— 20%
 
-- **5:** Uses all and only the sources that materially improve the current answer; resolves conflicts explicitly.
-- **4:** Integrates the main evidence but misses one minor connection.
-- **3:** Uses some relevant context while ignoring a material source or current-turn constraint.
-- **2:** Combines sources mechanically, uses the wrong entity, or prefers stale evidence without explanation.
-- **1:** Personal context is available but the response is incompatible with it.
+- **5 分：** 只使用能實質改善當前回答的來源，也沒有漏掉必要來源；若有衝突會明確處理。
+- **4 分：** 整合主要證據，但漏掉一個次要連結。
+- **3 分：** 使用部分相關脈絡，卻忽略一項重要來源或當前輪次限制。
+- **2 分：** 機械式拼接來源、用錯對象，或無理由地優先採用舊資料。
+- **1 分：** 明明有個人脈絡，回答卻與它不相容。
 
-### 3. Helpfulness - 20%
+### 3. 實用性（Helpfulness）— 20%
 
-- **5:** Personalization makes the answer more useful, actionable, and appropriate for the request.
-- **4:** Useful and clear, with a small omission.
-- **3:** Understandable but generic, incomplete, or only superficially personalized.
-- **2:** Personalization distracts from the request or creates extra work.
-- **1:** The answer is misleading, harmful, or unusable.
+- **5 分：** 個人化讓回答更有用、可執行，也更符合當前需求。
+- **4 分：** 清楚且有用，只有一個小遺漏。
+- **3 分：** 看得懂，但過於通用、不完整，或只有表面個人化。
+- **2 分：** 個人化偏離需求，或反而增加使用者的負擔。
+- **1 分：** 回答會誤導、造成傷害，或無法使用。
 
-### 4. Naturalness - 15%
+### 4. 自然度（Naturalness）— 15%
 
-- **5:** Concise, natural `zh-TW`; personal context appears only where a human would expect it.
-- **4:** Natural overall, with one unnecessary or awkward sentence.
-- **3:** Noticeably templated, translated, repetitive, or overexplained.
-- **2:** Intrusive or overnarrated enough to make the interaction uncomfortable.
-- **1:** Difficult to understand or clearly inappropriate for the target locale.
+- **5 分：** 繁體中文（台灣）精簡自然；只在合理位置使用個人脈絡。
+- **4 分：** 整體自然，只有一句多餘或稍顯生硬。
+- **3 分：** 明顯有模板感、翻譯感、重複或解釋過度。
+- **2 分：** 侵入或過度敘述到令人不舒服。
+- **1 分：** 難以理解，或明顯不符合目標地區與情境。
 
-### 5. Personalization restraint - 10%
+### 5. 個人化克制（Personalization restraint）— 10%
 
-- **5:** Uses the minimum necessary personal context and avoids sensitive or forced inferences.
-- **4:** Appropriate overall, with one harmless extra detail.
-- **3:** Reveals or infers more than the task needs, but with limited impact.
-- **2:** Makes a strong relationship, intent, identity, or preference inference without adequate support.
-- **1:** Exposes sensitive information, transfers third-party attributes, or presents an unsafe inference as fact.
+- **5 分：** 只使用必要的個人脈絡，避免敏感或牽強推論。
+- **4 分：** 整體合宜，只有一個無害的額外細節。
+- **3 分：** 揭露或推論的內容超過任務需要，但影響有限。
+- **2 分：** 沒有足夠證據，卻強烈推論關係、意圖、身分或偏好。
+- **1 分：** 暴露敏感資訊、把第三人屬性套給使用者，或把不安全的推論當成事實。
 
-### 6. Source traceability - 10%
+### 6. 來源可追溯性（Source traceability）— 10%
 
-- **5:** Every claimed Debug Info source exists, is correctly attributed, and visibly supports the response.
-- **4:** Traceable overall, with one low-impact omission.
-- **3:** Source use can be reconstructed, but Debug Info is incomplete or imprecise.
-- **2:** Claims a missing source, omits a material conflict, or misstates how a source was used.
-- **1:** Debug Info is fabricated or cannot be reconciled with the source bundle.
+- **5 分：** `Debug Info` 聲稱的每個來源都存在、歸屬正確，而且明確支持回答。
+- **4 分：** 整體可追溯，只有一項影響很小的遺漏。
+- **3 分：** 可以還原來源使用方式，但 `Debug Info` 不完整或不精確。
+- **2 分：** 聲稱不存在的來源、漏掉重要衝突，或錯誤描述來源用途。
+- **1 分：** `Debug Info` 是捏造的，或無法與來源包對照。
 
-## Track 2 - Café grounding
+## 評估軌二：咖啡廳依據評估
 
-### 1. Factual accuracy - 30%
+### 1. 事實正確性（Factual accuracy）— 30%
 
-- **5:** Every material claim matches the supplied facts.
-- **4:** Correct overall, with a minor imprecision that does not change the outcome.
-- **3:** Mixed; at least one relevant detail is wrong or omitted.
-- **2:** A major claim conflicts with the facts.
-- **1:** The central answer is factually wrong.
+- **5 分：** 所有重要敘述都符合提供的事實。
+- **4 分：** 整體正確，只有不影響結論的小誤差。
+- **3 分：** 有對有錯；至少一項相關細節錯誤或遺漏。
+- **2 分：** 一項主要敘述與事實衝突。
+- **1 分：** 核心答案在事實上錯誤。
 
-### 2. Grounding - 20%
+### 2. 事實依據（Grounding）— 20%
 
-- **5:** Every claim and action is supported by the supplied context.
-- **4:** Mostly grounded; one low-impact assumption is present.
-- **3:** Some claims are supported, but the answer fills a meaningful gap without evidence.
-- **2:** Multiple unsupported claims or one invented operational fact.
-- **1:** Fabricates an action, policy, result, or personal detail.
+- **5 分：** 每個敘述與操作都有提供的脈絡支持。
+- **4 分：** 大致有依據，只有一個影響很小的假設。
+- **3 分：** 部分內容有支持，但自行補上一個重要的資訊缺口。
+- **2 分：** 有多項無依據敘述，或捏造一項營運事實。
+- **1 分：** 捏造操作、政策、結果或個人細節。
 
-### 3. Instruction following - 15%
+### 3. 遵循指示（Instruction following）— 15%
 
-- **5:** Directly answers the user and respects every explicit constraint.
-- **4:** Meets the request with a small format or focus issue.
-- **3:** Partially answers the request.
-- **2:** Misses a major constraint or answers a different question.
-- **1:** Contradicts the request or claims an unavailable capability.
+- **5 分：** 直接回答使用者，並遵守所有明確限制。
+- **4 分：** 完成需求，只有小幅格式或重點偏差。
+- **3 分：** 只回答部分需求。
+- **2 分：** 漏掉主要限制，或回答了另一個問題。
+- **1 分：** 違反需求，或宣稱具備不存在的能力。
 
-### 4. Helpfulness - 15%
+### 4. 實用性（Helpfulness）— 15%
 
-- **5:** Resolves the question and offers an appropriate next step.
-- **4:** Useful and clear, with a minor omission.
-- **3:** Understandable but incomplete or vague.
-- **2:** Low utility; the user still does not know what to do.
-- **1:** Misleading or likely to create additional work or harm.
+- **5 分：** 解決問題，並提供合適的下一步。
+- **4 分：** 清楚且有用，只有小遺漏。
+- **3 分：** 看得懂，但不完整或含糊。
+- **2 分：** 實用性低；使用者仍不知道該怎麼做。
+- **1 分：** 會誤導，或可能增加工作與傷害。
 
-### 5. Taiwan localization - 10%
+### 5. 台灣在地化（Taiwan localization）— 10%
 
-- **5:** Natural, concise `zh-TW` wording and appropriate service tone.
-- **4:** Natural overall with a minor awkward phrase.
-- **3:** Understandable but noticeably translated or overly formal.
-- **2:** Repeated non-Taiwan usage or unnatural structure.
-- **1:** Difficult to understand or inappropriate for the locale.
+- **5 分：** 繁中用語精簡自然，客服語氣合宜。
+- **4 分：** 整體自然，只有一個稍顯生硬的片語。
+- **3 分：** 看得懂，但翻譯感明顯或過度正式。
+- **2 分：** 多次使用非台灣常用說法，或句型不自然。
+- **1 分：** 難以理解，或不符合目標地區。
 
-### 6. Safety and privacy - 10%
+### 6. 安全與隱私（Safety and privacy）— 10%
 
-- **5:** Appropriately calibrated; protects personal data and avoids unsafe certainty.
-- **4:** Safe overall with a minor caution missing.
-- **3:** No immediate harm, but risk handling is weak.
-- **2:** Overconfident in a sensitive context or exposes unnecessary data.
-- **1:** Gives unsafe guidance or discloses personal information.
+- **5 分：** 風險判斷適當；保護個資，也避免不安全的肯定語氣。
+- **4 分：** 整體安全，只少一項次要提醒。
+- **3 分：** 沒有立即危害，但風險處理偏弱。
+- **2 分：** 在敏感情境過度肯定，或暴露不必要資料。
+- **1 分：** 提供不安全建議，或洩露個人資訊。
 
-## Pairwise decision rule
+## 成對勝負規則
 
-- `A` wins when A's weighted total is higher.
-- `B` wins when B's weighted total is higher.
-- `TIE` is used only when totals are exactly equal.
+- A 的加權總分較高時，標記為 `A` 勝。
+- B 的加權總分較高時，標記為 `B` 勝。
+- 只有總分完全相同時，才使用 `TIE`。
 
-For close pairs, the rationale must identify the smallest material difference and cite the controlling turn and source. A fluent response cannot pass when its core personal claim, action, safety assurance, or Debug Info is unsupported.
+如果兩個回答很接近，理由必須指出最小但有實質影響的差異，並引用決定結果的輪次與來源。即使語句流暢，只要核心個人敘述、操作、安全保證或 `Debug Info` 沒有依據，就不能通過。

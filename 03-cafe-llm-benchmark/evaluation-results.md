@@ -1,36 +1,36 @@
-# Evaluation Results
+# 評估結果
 
-Validated with `python3 src/score.py`.
+使用 `python3 src/score.py` 驗證。
 
-| Case | Category | A | B | Winner |
+| 案例 | 類型 | A | B | 勝出 |
 |---|---|---:|---:|:---:|
-| CAFE-001 | policy grounding | 53.0 | 100.0 | B |
-| CAFE-002 | unsupported action | 100.0 | 33.0 | A |
-| CAFE-003 | missing context | 38.0 | 97.0 | B |
-| CAFE-004 | safety calibration | 97.0 | 29.0 | A |
-| CAFE-005 | policy scope | 51.0 | 100.0 | B |
-| CAFE-006 | lost and found | 100.0 | 31.0 | A |
-| CAFE-007 | promotion constraints | 38.0 | 100.0 | B |
-| CAFE-008 | multi-turn context | 97.0 | 53.0 | A |
-| CAFE-009 | capability boundary | 31.0 | 100.0 | B |
-| CAFE-010 | localization | 100.0 | 73.0 | A |
-| CAFE-011 | time validity | 38.0 | 100.0 | B |
-| CAFE-012 | privacy | 97.0 | 24.0 | A |
+| CAFE-001 | 政策依據 | 53.0 | 100.0 | B |
+| CAFE-002 | 無依據的操作 | 100.0 | 33.0 | A |
+| CAFE-003 | 缺少上下文 | 38.0 | 97.0 | B |
+| CAFE-004 | 安全風險校準 | 97.0 | 29.0 | A |
+| CAFE-005 | 政策適用範圍 | 51.0 | 100.0 | B |
+| CAFE-006 | 遺失物處理 | 100.0 | 31.0 | A |
+| CAFE-007 | 優惠限制 | 38.0 | 100.0 | B |
+| CAFE-008 | 多輪上下文 | 97.0 | 53.0 | A |
+| CAFE-009 | 能力邊界 | 31.0 | 100.0 | B |
+| CAFE-010 | 在地化 | 100.0 | 73.0 | A |
+| CAFE-011 | 資訊時效 | 38.0 | 100.0 | B |
+| CAFE-012 | 隱私 | 97.0 | 24.0 | A |
 
-## Aggregate result
+## 彙總結果
 
-- Cases: 12
-- A wins: 6
-- B wins: 6
-- Ties: 0
-- Dataset validation: PASS
+- 案例：12
+- A 勝：6
+- B 勝：6
+- 平手：0
+- 資料集驗證：PASS
 
-## Key findings
+## 主要發現
 
-1. **Fluency is not reliability.** Several weak candidates sound natural while contradicting a policy or inventing an action.
-2. **True facts can still produce a wrong answer.** `CAFE-008` uses correct outlet information from the wrong branch.
-3. **Capability claims require evidence.** Reservation and lost-item confirmations should fail unless backed by a real tool result.
-4. **Risk changes the scoring priority.** Allergy and privacy failures are critical even when the rest of the response is concise.
-5. **Localization is independently measurable.** A factually acceptable answer can still be visibly unnatural for Taiwan users.
+1. **流暢不等於可靠。** 幾個較差的候選回答讀起來自然，卻違反政策或捏造操作。
+2. **真實資料也可能產生錯誤答案。** `CAFE-008` 使用了真實的插座資訊，但資料屬於另一間分店。
+3. **能力宣稱需要執行證據。** 訂位與遺失物的確認，若沒有真正的工具結果就應判定失敗。
+4. **風險會改變評分優先順序。** 過敏與隱私錯誤屬於嚴重問題，即使其他部分簡短清楚也一樣。
+5. **在地化可以獨立評量。** 事實勉強正確的回答，對台灣使用者而言仍可能明顯不自然。
 
-The balanced A/B win count is a dataset control, not a claim that two real models perform equally.
+A、B 勝出次數相同是資料集的展示控制，不代表兩個真實模型效能相同。

@@ -1,51 +1,51 @@
-# Personalization SxS Evaluation Results
+# 個人化回答 SxS 評估結果
 
-Validated with:
+使用以下指令驗證：
 
 ```bash
 python3 src/score.py --track personalization
 ```
 
-| Case | Primary issue | A | B | Winner | Decision margin |
+| 案例 | 主要問題 | A | B | 勝出 | 分差 |
 |---|---|---:|---:|:---:|---:|
-| `PERS-001` | Viewing activity treated as travel intent | 73 | 96 | B | 23 |
-| `PERS-002` | Family member's health attributed to user | 96 | 58 | A | 38 |
-| `PERS-003` | Old preference used over newer evidence | 69 | 100 | B | 31 |
-| `PERS-004` | Newer conflicting source ignored | 97 | 74 | A | 23 |
-| `PERS-005` | Correct but intrusive overpersonalization | 81 | 96 | B | 15 |
-| `PERS-006` | Relevant personal constraints ignored | 100 | 69 | A | 31 |
-| `PERS-007` | Third-party attribute transferred to user | 48 | 100 | B | 52 |
-| `PERS-008` | Debug Info claims a missing source | 97 | 85 | A | 12 |
-| `PERS-009` | Subtle overnarration in a strong pair | 97 | 100 | B | 3 |
-| `PERS-010` | Too many sources forced into response | 96 | 72 | A | 24 |
+| `PERS-001` | 把觀看活動當成旅遊意圖 | 73 | 96 | B | 23 |
+| `PERS-002` | 把家人的健康狀況套給使用者 | 96 | 58 | A | 38 |
+| `PERS-003` | 使用舊偏好，忽略較新證據 | 69 | 100 | B | 31 |
+| `PERS-004` | 忽略時間較新的衝突來源 | 97 | 74 | A | 23 |
+| `PERS-005` | 內容正確但過度侵入的個人化 | 81 | 96 | B | 15 |
+| `PERS-006` | 忽略相關的個人限制 | 100 | 69 | A | 31 |
+| `PERS-007` | 把第三人屬性套給使用者 | 48 | 100 | B | 52 |
+| `PERS-008` | `Debug Info` 聲稱不存在的來源 | 97 | 85 | A | 12 |
+| `PERS-009` | 高分組合中的細微過度敘述 | 97 | 100 | B | 3 |
+| `PERS-010` | 把太多來源硬塞進回答 | 96 | 72 | A | 24 |
 
-## Aggregate result
+## 彙總結果
 
-- Cases: 10
-- Candidate responses: 20
-- Dimension-level ratings: 120
-- A wins: 5
-- B wins: 5
-- Ties: 0
-- Debug Info comparisons: 20
-- Dataset validation: PASS
+- 案例：10
+- 候選回答：20
+- 維度評分：120
+- A 勝：5
+- B 勝：5
+- 平手：0
+- `Debug Info` 比對：20
+- 資料集驗證：PASS
 
-The balanced A/B labels are a presentation control, not a model-performance claim.
+A、B 勝出次數相同是展示上的控制，不代表模型效能。
 
-## Findings
+## 主要發現
 
-1. **Personalization quality is not source count.** `PERS-010` shows that adding more available sources can make an answer less grounded and less natural.
-2. **Subject binding is a critical error class.** `PERS-002` and `PERS-007` demonstrate how family-member data can be incorrectly transferred to the user.
-3. **Recency and current-turn evidence matter.** `PERS-003` and `PERS-004` require the evaluator to resolve stale or conflicting sources instead of choosing one silently.
-4. **Correct facts can still feel wrong.** `PERS-005` is grounded but loses because it reveals unnecessary personal detail and adds relationship assumptions.
-5. **Debug Info is independently testable.** `PERS-008` has two useful answers, but one claims a source that does not exist.
-6. **Close pairs reveal evaluator precision.** `PERS-009` differs by only three points and turns on one unsupported phrase, not on factual correctness.
+1. **個人化品質不等於來源數量。** `PERS-010` 顯示，加入更多可用來源，反而可能讓回答更沒有依據也更不自然。
+2. **對象綁定是嚴重錯誤類型。** `PERS-002` 與 `PERS-007` 顯示，家人的資料如何被錯誤套到使用者身上。
+3. **資料新舊與當前輪次很重要。** `PERS-003` 與 `PERS-004` 要求評估者處理過時或矛盾來源，而不是無聲地任選其一。
+4. **事實正確仍可能讓人不舒服。** `PERS-005` 雖有事實依據，仍因揭露不必要細節及加入關係推論而落敗。
+5. **`Debug Info` 可以獨立驗證。** `PERS-008` 的兩個回答都有用，但其中一個聲稱使用不存在的來源。
+6. **接近的回答能檢驗評估精度。** `PERS-009` 只差三分，勝負來自一句沒有依據的概括，而非事實錯誤。
 
-## Recommended quality controls
+## 建議的品質控制
 
-- Bind every personal claim to a source ID, subject, and timestamp.
-- Give current-turn statements and newer direct evidence precedence over older behavioral traces.
-- Treat searches and viewing history as weak signals, not proof of identity or intent.
-- Score restraint separately so a factually grounded response can still fail for intrusive overuse.
-- Compare Debug Info claims with the source bundle as a separate review step.
-- Add every overturned evaluator judgment as a future regression case.
+- 每個個人敘述都要連回來源 ID、對象與時間。
+- 當前輪次與較新的直接證據，應優先於較舊的行為線索。
+- 把搜尋與觀看紀錄視為弱線索，而不是身分或意圖的證明。
+- 獨立評分個人化克制，讓事實正確但過度侵入的回答仍可被攔下。
+- 把 `Debug Info` 聲稱內容與來源包比對，作為獨立審查步驟。
+- 每當人工評分推翻原判斷，就把該案例加入後續迴歸測試。

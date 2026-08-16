@@ -1,30 +1,30 @@
-# Debug Info Verification Checklist
+# `Debug Info` 核對清單
 
-Debug Info is evaluated as evidence, not decoration. A response can be useful and still fail traceability when its claimed source use cannot be reproduced.
+`Debug Info` 是證據，不是裝飾。回答可能很有用，但只要聲稱的來源使用方式無法重現，仍然無法通過可追溯性檢查。
 
-## Per-response verification
+## 逐回答核對
 
-- [ ] List every claimed source ID.
-- [ ] Confirm that each claimed ID exists in the case source bundle.
-- [ ] Confirm that the source belongs to the correct person or entity.
-- [ ] Confirm that the source timestamp is appropriate for the current request.
-- [ ] Compare claimed sources with the facts actually used in the response.
-- [ ] Flag available relevant sources that were ignored.
-- [ ] Flag sources named in Debug Info but absent from the bundle.
-- [ ] Flag conclusions that go beyond what the source supports.
-- [ ] Record the exact turn IDs affected by each issue.
+- [ ] 列出所有聲稱使用的來源 ID。
+- [ ] 確認每個來源 ID 都存在於案例來源包。
+- [ ] 確認來源屬於正確的人或對象。
+- [ ] 確認來源時間適用於當前需求。
+- [ ] 比對聲稱的來源與回答實際使用的事實。
+- [ ] 標記存在但被忽略的相關來源。
+- [ ] 標記 `Debug Info` 有列出、來源包卻不存在的來源。
+- [ ] 標記超出來源可支持範圍的結論。
+- [ ] 記錄每個問題影響的確切輪次 ID。
 
-## Issue labels
+## 問題標籤
 
-| Label | Meaning |
+| 標籤 | 意義 |
 |---|---|
-| `missing_source` | Debug Info claims a source ID that does not exist. |
-| `unused_claimed_source` | A source is named but has no visible relationship to the answer. |
-| `relevant_source_omitted` | An available source would materially change the answer but was ignored. |
-| `identity_mismatch` | The source belongs to another person or entity. |
-| `recency_mismatch` | A stale source is preferred over newer direct evidence without explanation. |
-| `unsupported_inference` | The source exists but does not justify the conclusion drawn from it. |
+| `missing_source` | `Debug Info` 聲稱一個不存在的來源 ID。 |
+| `unused_claimed_source` | 列出某個來源，但它與回答內容沒有可見關係。 |
+| `relevant_source_omitted` | 有一個會實質改變答案的來源，卻被忽略。 |
+| `identity_mismatch` | 來源屬於另一個人或對象。 |
+| `recency_mismatch` | 無合理說明地用舊來源取代較新的直接證據。 |
+| `unsupported_inference` | 來源存在，但不足以支持所做結論。 |
 
-## Pass condition
+## 通過條件
 
-Debug Info passes only when every claimed source exists, is correctly attributed, and supports the statement it is used to justify. More sources do not earn a higher score by themselves.
+只有在每個聲稱來源都存在、歸屬正確，而且能支持用它證明的敘述時，`Debug Info` 才能通過。來源數量多，本身不會得到較高分。
