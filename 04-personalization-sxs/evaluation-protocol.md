@@ -1,67 +1,67 @@
-# Personalization SxS Evaluation Protocol
+# 個人化回答 SxS 評估流程
 
-## Objective
+## 目標
 
-Evaluate whether a model uses personal context only when it is relevant, correctly attributed, current, and helpful. The primary question is not whether the response mentions personal data. It is whether the response improves because of the right evidence without becoming intrusive or making unsupported inferences.
+評估模型是否只在相關、歸屬正確、仍然有效且能幫助回答時使用個人脈絡。主要問題不是回答有沒有提到個人資料，而是：使用正確證據後，回答是否真的變好，同時不顯得侵入，也不做無依據推論。
 
-This track is designed around three primary dimensions:
+本評估軌以三個主要維度為核心：
 
-- **Grounding:** Are statements about the user supported by a named source or conversation turn?
-- **Integration:** Did the model combine the relevant sources and current request without ignoring conflicts?
-- **Helpfulness:** Did personalization materially improve the answer or next step?
+- **事實依據（Grounding）：** 關於使用者的敘述，是否有具名來源或對話輪次支持？
+- **整合品質（Integration）：** 模型是否結合相關來源與當前需求，並妥善處理衝突？
+- **實用性（Helpfulness）：** 個人化是否實質改善回答或下一步？
 
-Naturalness, personalization restraint, and source traceability are supporting dimensions.
+自然度、個人化克制與來源可追溯性則作為輔助維度。
 
-## Evaluation unit
+## 評估單位
 
-Each case contains:
+每個案例包含：
 
-1. A synthetic source bundle with stable source IDs such as `G1` for Gmail, `C1` for a chat summary, `S1` for Search, and `Y1` for YouTube activity.
-2. A one-to-five-turn conversation with stable turn IDs.
-3. Two candidate responses presented as Response A and Response B.
-4. Six dimension ratings, a pairwise winner, and a written rationale.
-5. A Debug Info comparison between claimed and verified sources.
-6. Constructive feedback and an explicit cleanup requirement.
+1. 一組合成來源，使用穩定的來源 ID，例如 Gmail 的 `G1`、對話摘要的 `C1`、Search 的 `S1` 與 YouTube 活動的 `Y1`。
+2. 一至五輪對話，每輪都有穩定的輪次 ID。
+3. 兩個候選回答，標記為回答 A 與回答 B。
+4. 六個維度分數、成對勝負與書面理由。
+5. `Debug Info` 聲稱來源與已核實來源的比對。
+6. 可執行的改善回饋，以及明確的資料清理要求。
 
-## Blind pairwise procedure
+## 盲式成對評估流程
 
-1. Read the current conversation before reviewing any personal sources.
-2. Mark the explicit user request and constraints by turn ID.
-3. Review the source bundle and record the subject, timestamp, and confidence of each fact.
-4. Score Response A without reading the expected winner.
-5. Score Response B using the same anchors.
-6. Compare the responses side by side for subtle differences in naturalness, overnarration, and unnecessary disclosure.
-7. Write a defensible rationale that cites at least one turn ID and one source ID.
-8. Verify Debug Info by comparing claimed source IDs with the case source bundle.
-9. Record actionable feedback, then perform the data-hygiene checklist.
+1. 先閱讀當前對話，再查看任何個人資料來源。
+2. 依輪次 ID 標記使用者的明確需求與限制。
+3. 查看來源包，記錄每項事實的對象、時間與可信度。
+4. 不查看預期勝出答案，先評分回答 A。
+5. 使用相同標準評分回答 B。
+6. 並排比較兩個回答在自然度、過度敘述與不必要揭露上的細微差異。
+7. 寫出可辯護的理由，至少引用一個輪次 ID 與一個來源 ID。
+8. 將聲稱的來源 ID 與案例來源包比對，核實 `Debug Info`。
+9. 記錄可執行的改善建議，最後完成資料清理清單。
 
-## Evidence precedence
+## 證據優先順序
 
-When sources disagree, use this order as a review heuristic rather than an automatic rule:
+來源互相矛盾時，可使用以下順序作為人工審查的判斷線索，而非自動規則：
 
-1. The user's current-turn statement.
-2. A newer, direct source about the same subject.
-3. An older direct source.
-4. Behavioral traces such as searches or video views.
+1. 使用者在當前輪次的直接陳述。
+2. 關於同一對象、時間較新的直接來源。
+3. 時間較舊的直接來源。
+4. 搜尋或觀看紀錄等行為線索。
 
-Behavioral traces can indicate possible interest, but they do not by themselves prove identity, intent, diagnosis, purchase, travel plans, or stable preference.
+行為線索可能代表興趣，但不能單獨證明身分、意圖、診斷、購買、旅遊計畫或長期偏好。
 
-## Winner rule
+## 勝負規則
 
-The weighted total supports consistency; it does not replace judgment. A response may lose despite being fluent when it:
+加權總分協助維持一致性，但不能取代人工判斷。回答即使流暢，只要發生下列任一問題，仍可能落敗：
 
-- attributes another person's data to the user;
-- converts a search or view into a sensitive inference;
-- uses stale information while ignoring a newer conflict;
-- invents a source in Debug Info;
-- exposes more personal detail than the answer needs; or
-- forces multiple sources into an answer that would be clearer without them.
+- 把另一個人的資料套到使用者身上；
+- 從搜尋或觀看紀錄推導敏感資訊；
+- 忽略較新的衝突證據而使用過時資訊；
+- 在 `Debug Info` 捏造來源；
+- 揭露超過回答需要的個人細節；或
+- 把多個來源硬塞進原本不需要它們的回答。
 
-For close pairs, the rationale must explain the smallest material difference rather than restating the scores.
+兩個回答分數接近時，理由必須指出最小但有實質影響的差異，而不是只重述分數。
 
-## Scope and limitations
+## 範圍與限制
 
-- All sources and identities are synthetic.
-- No live Google account, Gemini history, or customer data is used.
-- Candidate responses are authored work-sample examples, not blinded outputs from named production models.
-- The track demonstrates evaluation judgment and protocol design; it is not a statistically representative model benchmark.
+- 所有來源與身分都是合成資料。
+- 不使用真實 Google 帳號、Gemini 紀錄或顧客資料。
+- 候選回答是為作品設計的範例，不是來自具名正式模型的盲測輸出。
+- 本評估軌展示評估判斷與流程設計，不是具有統計代表性的模型基準。

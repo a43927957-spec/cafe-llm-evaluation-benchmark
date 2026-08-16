@@ -1,32 +1,32 @@
-# Recommendations
+# 改善建議
 
-The benchmark suggests four practical controls for a customer-service LLM.
+這份評估指出客服 LLM 可優先加入四項控制。
 
-## 1. Bind claims to evidence
+## 1. 讓每個敘述都能連回證據
 
-Require every policy, promotion, branch attribute, and operating hour to come from an approved fact record. When the fact is missing, the model should ask a focused question or route to staff rather than fill the gap.
+每項政策、優惠、分店屬性與營業時間，都必須來自已核准的事實紀錄。缺少資料時，模型應提出一個聚焦的問題，或轉由現場人員確認，不應自行填補空白。
 
-## 2. Separate answers from actions
+## 2. 分開「回答」與「執行操作」
 
-The model may draft a reservation request or lost-item inquiry, but it must not say the action succeeded without a confirmed tool result. User-visible wording should distinguish:
+模型可以協助草擬訂位請求或遺失物詢問，但在沒有確認的工具結果時，不得宣稱操作成功。對使用者顯示的文字應清楚區分：
 
-- `I can help prepare the request.`
-- `The request was accepted by the system.`
+- 「我可以協助整理這項請求。」
+- 「系統已接受這項請求。」
 
-## 3. Add deterministic risk gates
+## 3. 加入可確定執行的風險關卡
 
-Allergy, payment, privacy, and identity-related prompts should trigger stricter response rules before generation. These gates should prevent absolute safety claims and third-party data disclosure.
+過敏、付款、隱私與身分相關問題，應在生成回答前觸發更嚴格的規則。這些關卡要阻止絕對安全保證，以及第三人資料的洩露。
 
-## 4. Evaluate context binding
+## 4. 評估上下文綁定
 
-Tests should include multiple branches, dates, pronouns, and policy exceptions. Retrieval of a true fact is not enough; the system must attach it to the correct entity and time.
+測試應包含多間分店、多個日期、代名詞與政策例外。檢索到真實資料還不夠；系統必須把資料連到正確對象與時間。
 
-## Suggested next version
+## 建議的下一版本
 
-- Expand from 12 to 50 cases.
-- Collect blinded outputs from at least two named models.
-- Add a second human rater and report agreement.
-- Track critical failures separately from average score.
-- Add regression cases whenever a real evaluator overturns an automated judgment.
+- 從 12 個案例擴增至 50 個。
+- 收集至少兩個具名模型的盲測輸出。
+- 加入第二位人工評分者並回報一致性。
+- 把嚴重錯誤與平均分數分開追蹤。
+- 每當人工評分推翻自動判斷，就新增一個迴歸案例。
 
-This turns evaluation from a one-time demo into an error-driven learning loop: failure → corrected judgment → reusable rule → regression case.
+這會把一次性的展示，轉成依錯誤持續學習的循環：失敗 → 修正判斷 → 可重用規則 → 迴歸案例。

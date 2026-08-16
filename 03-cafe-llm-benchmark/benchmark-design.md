@@ -1,45 +1,45 @@
-# Benchmark Design
+# 基準設計
 
-## Objective
+## 目標
 
-Measure whether a customer-service LLM can answer in natural Taiwan Traditional Chinese while staying grounded in a small set of store facts and conversational constraints.
+衡量客服 LLM 能否使用自然的繁體中文（台灣）回答，同時遵守一小組店家事實與對話限制。
 
-## Scope
+## 範圍
 
-- 12 synthetic cases
-- Two candidate responses per case
-- Six weighted dimensions
-- Pairwise winner plus written rationale
-- No live model API calls and no customer data
+- 12 個合成案例
+- 每個案例有兩個候選回答
+- 六個加權評分維度
+- 成對勝負與書面理由
+- 不呼叫即時模型 API，也不使用顧客資料
 
-## Case coverage
+## 案例涵蓋範圍
 
-| Risk area | Cases |
+| 風險 | 案例 |
 |---|---|
-| Policy and exception handling | `CAFE-001`, `CAFE-005`, `CAFE-007` |
-| Unsupported actions and status claims | `CAFE-002`, `CAFE-006`, `CAFE-009` |
-| Missing or multi-turn context | `CAFE-003`, `CAFE-008` |
-| Health, safety, and privacy | `CAFE-004`, `CAFE-012` |
-| Taiwan localization | `CAFE-010` |
-| Time-sensitive information | `CAFE-011` |
+| 政策與例外處理 | `CAFE-001`、`CAFE-005`、`CAFE-007` |
+| 無依據的操作與狀態宣稱 | `CAFE-002`、`CAFE-006`、`CAFE-009` |
+| 缺少上下文或多輪上下文 | `CAFE-003`、`CAFE-008` |
+| 健康、安全與隱私 | `CAFE-004`、`CAFE-012` |
+| 台灣在地化 | `CAFE-010` |
+| 具時效性的資訊 | `CAFE-011` |
 
-## Evaluation procedure
+## 評估流程
 
-1. Read only the facts, prompt, and relevant prior context for one case.
-2. Score Response A independently on all six dimensions.
-3. Score Response B independently using the same anchors.
-4. Compare weighted totals.
-5. Write a short rationale citing the controlling fact and failure mode.
-6. Run `src/score.py` to validate score ranges, dimensions, labels, and winner consistency.
+1. 每次只讀取單一案例的事實、問題與相關前文。
+2. 依六個維度獨立評分回答 A。
+3. 使用相同的評分錨點獨立評分回答 B。
+4. 比較加權總分。
+5. 寫出簡短理由，引用決定結果的事實與失敗類型。
+6. 執行 `src/score.py`，驗證分數範圍、維度、標籤與勝負是否一致。
 
-## Design controls
+## 設計控制
 
-- Candidate labels alternate, producing six A wins and six B wins.
-- Every case states its evidence explicitly.
-- High-risk cases test calibrated refusal instead of generic refusal.
-- Scoring code uses only Python's standard library.
-- The dataset declares itself synthetic in machine-readable metadata.
+- 交錯安排候選回答標籤，最後為 A 勝六次、B 勝六次。
+- 每個案例都明確列出證據。
+- 高風險案例測試的是適當校準的拒絕方式，而非一律拒絕。
+- 計分程式只使用 Python 標準函式庫。
+- 資料集在機器可讀的中繼資料中明確標示為合成資料。
 
-## Limits
+## 限制
 
-This is a small portfolio benchmark, not a statistically representative model leaderboard. The responses are synthetic candidates rather than blinded outputs from named production models. A larger study would add multiple raters, agreement metrics, randomized response order, and versioned model outputs.
+這是一份小型求職作品，不是具有統計代表性的模型排行榜。候選回答是合成範例，不是來自具名正式模型的盲測輸出。若擴大研究，應加入多位評分者、一致性指標、回答順序隨機化，以及有版本紀錄的模型輸出。

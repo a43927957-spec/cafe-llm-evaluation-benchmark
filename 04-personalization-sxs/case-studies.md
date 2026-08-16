@@ -1,112 +1,112 @@
-# Personalization SxS Case Studies
+# 個人化回答 SxS 案例
 
-The complete machine-readable set is in [`data/personalization_sxs.json`](../data/personalization_sxs.json). These cases emphasize evidence use, source conflicts, subtle naturalness differences, and Debug Info verification.
+完整的機器可讀資料集位於 [`data/personalization_sxs.json`](../data/personalization_sxs.json)。以下案例著重證據使用、來源衝突、自然度的細微差異，以及 `Debug Info` 核對。
 
-## Case 1 - Viewing activity is not intent (`PERS-001`)
+## 案例一：觀看紀錄不等於意圖（`PERS-001`）
 
-**Source `Y1`:** The user watched a Tokyo walking-route video.
+**來源 `Y1`：** 使用者看過一部東京散步路線影片。
 
-**Source `C1`:** The user recently said they were controlling spending and had no current overseas plan.
+**來源 `C1`：** 使用者最近表示正在控制支出，目前沒有出國計畫。
 
-**T1:** 週末想找個不用花太多錢的地方走走。
+**T1：** 週末想找個不用花太多錢的地方走走。
 
-**T3:** 台北市內就好。
+**T3：** 台北市內就好。
 
-**Response A - 73/100**
+**回答 A — 73/100**
 
 > 你最近在看東京旅遊影片，應該很想去日本；不如把這週末當成東京行前練習，去西門町逛日系商店。
 
-**Response B - 96/100**
+**回答 B — 96/100**
 
 > 如果要控制預算又留在台北市內，可以走大稻埕河濱或象山步道；兩個行程都能以捷運抵達。你比較想散步看風景，還是逛街？
 
-**Winner: B**
+**勝出：B**
 
-B directly integrates the budget constraint in `T1`, the location constraint in `T3`, and the recent spending context in `C1`. A uses a real activity from `Y1` but turns it into unsupported travel intent. This is a forced connection rather than a missing source.
+回答 B 直接整合 `T1` 的預算限制、`T3` 的地點限制，以及 `C1` 中近期控制支出的脈絡。回答 A 雖使用 `Y1` 的真實活動，卻把它推論成沒有依據的旅遊意圖。這是牽強連結，而不是缺少來源。
 
-## Case 2 - Search history is not a diagnosis (`PERS-002`)
+## 案例二：搜尋紀錄不等於診斷（`PERS-002`）
 
-**Source `S1`:** Searches about how to support a family member with migraines.
+**來源 `S1`：** 搜尋內容是如何協助有偏頭痛的家人。
 
-**Source `G1`:** The user's sister thanked them for helping prepare her medical questions.
+**來源 `G1`：** 使用者的姊姊感謝使用者協助整理她要詢問醫師的問題。
 
-**T1:** 幫我安排今晚比較放鬆的行程。
+**T1：** 幫我安排今晚比較放鬆的行程。
 
-**Response A - 96/100**
+**回答 A — 96/100**
 
 > 如果想放鬆，可以安排 20 分鐘散步、洗熱水澡，再留一段不看螢幕的時間。你想要在家休息，還是外出走走？
 
-**Response B - 58/100**
+**回答 B — 58/100**
 
 > 考量你最近偏頭痛，今晚應避免外出，關燈休息並提早睡覺最適合你。
 
-**Winner: A**
+**勝出：A**
 
-B makes a sensitive health inference and binds the sister's condition to the user. A remains useful without exposing or inventing health information. Relevant-looking personal data should be omitted when its subject or necessity is not established.
+回答 B 做出敏感健康推論，還把姊姊的狀況錯套給使用者。回答 A 不暴露也不捏造健康資料，仍然提供有用建議。當個人資料的對象或必要性未確定時，即使看似相關也應省略。
 
-## Case 3 - New evidence overrides an old preference (`PERS-003`)
+## 案例三：新證據應優先於舊偏好（`PERS-003`）
 
-**Source `C2`:** An older chat says the user likes dark-roast black coffee.
+**來源 `C2`：** 較舊的對話指出使用者喜歡深焙黑咖啡。
 
-**Source `G2`:** A recent message says the user now avoids caffeine at night.
+**來源 `G2`：** 較新的訊息指出使用者現在晚上會避開咖啡因。
 
-**T3:** 不要影響睡眠。
+**T3：** 不要影響睡眠。
 
-**Response A - 69/100**
+**回答 A — 69/100**
 
 > 你一直喜歡深焙黑咖啡，可以點一杯小杯深焙；份量少一點應該不太影響睡眠。
 
-**Response B - 100/100**
+**回答 B — 100/100**
 
 > 你在 T3 說不想影響睡眠，可以選無咖啡因咖啡、國寶茶或熱牛奶。若你仍喜歡咖啡風味，無咖啡因咖啡會最接近原本習慣。
 
-**Winner: B**
+**勝出：B**
 
-B gives precedence to the current request and newer source while using the older preference only as a flavor clue. A treats a historical preference as permanent and adds an unsupported sleep guarantee.
+回答 B 優先採用當前需求與較新來源，只把舊偏好當成口味線索。回答 A 把歷史偏好視為永久不變，還加入沒有依據的睡眠保證。
 
-## Case 4 - Correct answer, incorrect Debug Info (`PERS-008`)
+## 案例四：回答正確，但 `Debug Info` 錯誤（`PERS-008`）
 
-**Source `G6`:** A movie ticket for 14:00 at a Xinyi cinema.
+**來源 `G6`：** 一張 14:00 在信義區電影院放映的電影票。
 
-**Source `S3`:** A search for dinner after a movie in Xinyi.
+**來源 `S3`：** 搜尋內容是看完電影後在信義區吃晚餐。
 
-**T1:** 週日下午電影結束後，幫我排一個簡單行程。
+**T1：** 週日下午電影結束後，幫我排一個簡單行程。
 
-**Response A - 97/100**
+**回答 A — 97/100**
 
 > 你的電影在信義影城 14:00 開始；若約 16:30 結束，可以先在附近散步，再安排 17:30 左右吃晚餐。片長未提供，所以時間需要以實際散場為準。
 
-**Response B - 85/100**
+**回答 B — 85/100**
 
 > 電影 14:00 開始，散場後直接去信義區吃晚餐最順。Debug Info 顯示我使用了 Gmail 票券、搜尋紀錄與你過往偏好的義大利餐廳。
 
-**Winner: A**
+**勝出：A**
 
-Both responses are useful and use `G6` plus `S3`. B loses because its Debug Info claims an additional restaurant-preference source that does not exist. A also exposes the missing movie duration as an uncertainty instead of silently converting it into a fact.
+兩個回答都使用 `G6` 與 `S3`，也都有實用性。回答 B 落敗是因為它在 `Debug Info` 聲稱還有一個不存在的餐廳偏好來源。回答 A 也明確指出缺少電影片長，沒有默默把估算當成事實。
 
-## Case 5 - The close pair (`PERS-009`)
+## 案例五：分數非常接近的一組（`PERS-009`）
 
-**Source `C6`:** The user prefers a 25-minute focus and 5-minute break rhythm.
+**來源 `C6`：** 使用者偏好專注 25 分鐘、休息 5 分鐘的節奏。
 
-**T3:** 財政學，最後留一點時間整理錯題。
+**T3：** 財政學，最後留一點時間整理錯題。
 
-**Response A - 97/100**
+**回答 A — 97/100**
 
 > 依照你慣用的番茄鐘，20:00-20:25 複習重點、休息 5 分鐘；20:30-20:55 做題、休息 5 分鐘；21:00-21:25 複習弱點、休息 5 分鐘；21:30-22:00 整理錯題。這完美符合你的學習人格。
 
-**Response B - 100/100**
+**回答 B — 100/100**
 
 > 照你習慣的 25/5 節奏：20:00-20:25 複習重點，20:30-20:55 做題，21:00-21:25 檢查不熟的觀念；21:30-22:00 留給錯題整理。中間各休息 5 分鐘即可。
 
-**Winner: B**
+**勝出：B**
 
-Both candidates are grounded, integrated, and helpful. B wins only on naturalness: A turns one study habit into a broad claim about the user's "learning personality." This case tests whether the evaluator can identify overnarration without exaggerating its severity.
+兩個候選回答都有依據、整合良好，也能幫助使用者。回答 B 只在自然度上勝出：回答 A 把單一讀書習慣擴大為對「學習人格」的概括。這個案例用來測試評估者能否看出過度敘述，又不誇大它的嚴重程度。
 
-## Cross-case judgment pattern
+## 跨案例判斷模式
 
-The preferred response usually does four things:
+較好的回答通常做到四件事：
 
-1. Resolves the user, third-party subjects, dates, and current turn correctly.
-2. Uses only personal sources that materially improve the answer.
-3. States uncertainty when evidence is incomplete or conflicting.
-4. Makes Debug Info traceable to real source IDs without exposing unnecessary personal detail.
+1. 正確辨認使用者、第三人、日期與當前輪次。
+2. 只使用能實質改善回答的個人來源。
+3. 證據不完整或互相衝突時，明確說明不確定性。
+4. 讓 `Debug Info` 可連回真實來源 ID，同時不暴露不必要的個人細節。
