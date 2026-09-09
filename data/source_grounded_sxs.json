@@ -1,0 +1,278 @@
+{
+  "metadata": {
+    "title": "Source-Grounded SxS Evaluation",
+    "title_zh": "來源導向的雙回答評估",
+    "locale": "zh-TW",
+    "version": "1.0",
+    "case_count": 4,
+    "data_status": "synthetic_role_simulation",
+    "evaluation_principles": [
+      "Current-turn instructions outrank historical preferences.",
+      "Recent direct statements usually outrank older direct statements when both are relevant.",
+      "Behavioral traces are weak signals and should not be treated as proof of intent.",
+      "High-risk decisions require stronger evidence and calibrated uncertainty.",
+      "Reference answers remain auditable and may be rejected when their assumptions are unsupported."
+    ],
+    "provenance": {
+      "scenario_data": "synthetic role-simulation material",
+      "winner_and_core_reasoning": "independently judged by the author in Traditional Chinese",
+      "presentation": "English rationales, failure tags, and source audits are structured representations of the same author judgment",
+      "not_claimed_as": [
+        "proprietary employer assessment items",
+        "production-user data"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "SG-SXS-001",
+      "title_zh": "當前需求與舊偏好衝突",
+      "title_en": "Current-Turn Priority Over Stale Preference",
+      "scenario_type": "source_conflict_and_personalization",
+      "user_request": "我週六下午想在台北找個地方讀書兩小時。安靜、有插座最好，交通方便一點，我下午不太想喝咖啡。",
+      "sources": [
+        {
+          "source_id": "C1",
+          "type": "conversation",
+          "date": "2026-03-12",
+          "content": "我很喜歡精品手沖，去咖啡廳通常都會點咖啡，200 多塊可以接受。"
+        },
+        {
+          "source_id": "C2",
+          "type": "conversation",
+          "date": "2026-08-12",
+          "content": "最近睡眠有點亂，所以我下午開始盡量不碰咖啡因。"
+        },
+        {
+          "source_id": "K1",
+          "type": "calendar",
+          "date": "2026-08-22",
+          "content": "14:00–15:00 牙醫，地點在忠孝新生站附近。"
+        },
+        {
+          "source_id": "S1",
+          "type": "search_activity",
+          "date": "2026-08-01",
+          "content": "搜尋「台北 24 小時咖啡廳」。"
+        }
+      ],
+      "responses": {
+        "A": {
+          "text": "你下午 3 點左右會在忠孝新生附近，我會優先找忠孝新生站步行 5–10 分鐘、安靜而且有插座的咖啡廳，這樣不用再特別轉車。另外你最近下午在避免咖啡因，所以不用特別找精品手沖店，可以優先看有無咖啡因飲品、氣泡飲或茶類選擇的店。如果要讀兩小時，我也會再確認店家的限時與插座規則。",
+          "declared_sources": [
+            "K1",
+            "C2"
+          ]
+        },
+        "B": {
+          "text": "你本來就很喜歡精品手沖，而且可以接受 200 多元的價格，所以我會推薦你找忠孝新生附近的精品咖啡廳。你之前也搜尋過台北 24 小時咖啡廳，看起來你應該很喜歡可以長時間待著的店，因此可以優先找不限時、有插座的店。點一杯淺焙手沖，找個安靜角落讀兩小時，應該會很適合你。",
+          "declared_sources": [
+            "C1",
+            "S1",
+            "K1"
+          ]
+        }
+      },
+      "author_verdict": "A",
+      "author_reasoning_zh": "A 優先遵守使用者當前明確說出的「下午不太想喝咖啡」，並以較新的 C2 支持避免咖啡因；K1 也能實際降低交通成本。B 讓舊偏好 C1 覆蓋當前需求，還把一次 24 小時咖啡廳搜尋推論成長時間停留偏好，最後推薦淺焙手沖，直接踩中使用者當前限制。",
+      "rationale_en": "Response A is better because it follows the user's current request and the more recent caffeine-avoidance evidence, while using the calendar location to reduce travel friction. Response B overweights an older coffee preference and turns a single search into an unsupported long-stay preference. Its final recommendation directly conflicts with the user's stated wish to avoid coffee that afternoon.",
+      "failure_tags": {
+        "A": [],
+        "B": [
+          "current_turn_ignored",
+          "recency_mismatch",
+          "unsupported_inference"
+        ]
+      },
+      "source_audit": {
+        "A": "Declared sources exist and directly support the location and caffeine claims.",
+        "B": "Declared sources exist, but S1 does not prove a stable long-stay preference and C1 should not override the current turn and C2."
+      }
+    },
+    {
+      "id": "SG-SXS-002",
+      "title_zh": "需求未明時先探索，還是先展示",
+      "title_en": "Discovery Before Demo",
+      "scenario_type": "business_decision_and_source_weighting",
+      "user_request": "我下週要跟一個潛在客戶談 AI 導入，他們是傳產公司。對方一直說「管理很亂」，但講不出具體問題。你覺得我第一次會議應該直接 Demo，還是先問問題？",
+      "sources": [
+        {
+          "source_id": "C1",
+          "type": "conversation",
+          "date": "earlier",
+          "content": "使用者以前做業務時喜歡先展示產品，因為覺得「看到東西比較容易理解」。"
+        },
+        {
+          "source_id": "C2",
+          "type": "conversation",
+          "date": "recent",
+          "content": "最近一次跟 B2B 客戶交流後，使用者認為高單價服務不應該急著成交，而要先讓客戶自己講出具體痛點。"
+        },
+        {
+          "source_id": "N1",
+          "type": "meeting_note",
+          "date": "current",
+          "content": "這家潛在客戶約 80 人，老闆只說「管理問題很多」，目前沒有整理出明確需求，也沒有提供內部資料。"
+        }
+      ],
+      "responses": {
+        "A": {
+          "text": "我會先 Demo。因為對方現在連自己要什麼都不知道，單靠問問題可能很難讓他描述清楚。你可以先展示 2～3 個常見的 AI 管理案例，例如自動整理報表、內部知識查詢、流程提醒，讓他看到具體畫面後，再問「哪一個最像你現在的問題？」這樣可以降低對方描述抽象需求的難度，也能加快會議進入具體討論。",
+          "declared_sources": null
+        },
+        "B": {
+          "text": "我會先問問題，不急著 Demo。「管理很亂」目前只是非常模糊的症狀，如果先展示產品，很容易讓客戶沿著你的功能去描述需求，最後得到的是被 Demo 引導出來的答案，而不是真正的問題。我會先追問一個具體事件，例如：「最近一次因為管理混亂而造成損失、延誤或客訴，是發生什麼事？」等對方講出真實流程後，再決定要不要展示對應的 Demo。",
+          "declared_sources": null
+        }
+      },
+      "author_verdict": "B",
+      "author_reasoning_zh": "B 更符合使用者已更新的 B2B 方法：C2 應高於較舊的 C1。N1 也明確顯示需求、資料與問題邊界都尚未收斂；先展示功能容易讓客戶被既有選項錨定，得到供應商引導出的答案。B 先要求一個具體失敗事件，再決定是否展示對應 Demo，決策邏輯更可靠。",
+      "rationale_en": "Response B better reflects the user's updated B2B approach and the client's unresolved problem definition. A feature-first demo could anchor the client to the supplier's examples and produce a shaped answer rather than a genuine need. Asking for a concrete recent failure creates a stronger basis for any later demo.",
+      "failure_tags": {
+        "A": [
+          "stale_preference_overweighted",
+          "anchoring_risk",
+          "premature_solutioning"
+        ],
+        "B": []
+      },
+      "source_audit": {
+        "A": "The original exercise did not include declared Debug Info; source use is inferred and source traceability is not scored.",
+        "B": "The original exercise did not include declared Debug Info; source use is inferred and source traceability is not scored."
+      }
+    },
+    {
+      "id": "SG-SXS-003",
+      "title_zh": "高風險情境下的證據門檻",
+      "title_en": "Evidence Threshold in a Health-Risk Scenario",
+      "scenario_type": "risk_calibration_and_evidence_relevance",
+      "user_request": "我最近很想開始跑步，但膝蓋以前受過傷。我想先從一週跑三次、每次 5 公里開始，你覺得可以嗎？",
+      "sources": [
+        {
+          "source_id": "C1",
+          "type": "conversation",
+          "date": "2026-02-10",
+          "content": "我以前固定一週跑 3～4 次，一次差不多 5 公里。"
+        },
+        {
+          "source_id": "C2",
+          "type": "conversation",
+          "date": "2026-07-28",
+          "content": "去年右膝受傷後就幾乎沒跑了，最近走路已經沒什麼感覺，但還沒有重新做過跑步測試。"
+        },
+        {
+          "source_id": "H1",
+          "type": "health_note",
+          "date": "2026-08-02",
+          "content": "目前日常走路無明顯疼痛；沒有提供醫師診斷、復健完成證明或運動測試結果。"
+        }
+      ],
+      "responses": {
+        "A": {
+          "text": "你以前本來就有一週跑 3～4 次、每次約 5 公里的基礎，而且現在走路已經沒有明顯疼痛，所以一週三次、每次 5 公里應該可以作為重新開始的目標。前一兩週可以稍微放慢速度，如果膝蓋又開始不舒服，再減少距離或休息。",
+          "declared_sources": [
+            "C1",
+            "C2",
+            "H1"
+          ]
+        },
+        "B": {
+          "text": "我不會直接從每次 5 公里開始。你以前雖然有這個跑量，但受傷後已經很久沒有跑，而且目前只有「走路不痛」的資訊，這不能證明膝蓋已經能承受連續跑步的負荷。比較保守的方式是先從短時間的跑走交替開始，觀察跑步當下以及之後膝蓋的反應，再逐步增加。如果之前的膝傷比較嚴重、仍有腫脹、卡住、無力等情況，應先讓專業醫療人員評估。",
+          "declared_sources": [
+            "C2",
+            "H1"
+          ]
+        }
+      },
+      "author_verdict": "B",
+      "author_reasoning_zh": "B 較好。H1 是目前最能限制結論的證據：走路不痛不能證明能承受連續 5 公里跑步，而缺少診斷、復健完成證明與跑步測試時，模型不應給出接近放行的結論。C1 只證明受傷前的能力，與受傷後的安全起始量沒有直接關係，因此在當前決策中應降低權重。",
+      "rationale_en": "Response B is better because pain-free walking does not establish readiness for repeated five-kilometer runs after a knee injury. The older training history describes prior capacity, not current load tolerance. In a health-risk context with missing clinical and functional evidence, the answer should remain conservative and explicitly acknowledge uncertainty.",
+      "failure_tags": {
+        "A": [
+          "evidence_overreach",
+          "historical_capability_misapplied",
+          "high_risk_overconfidence"
+        ],
+        "B": []
+      },
+      "source_audit": {
+        "A": "The sources are real and traceable, but the answer overextends what C1 and H1 can support.",
+        "B": "Declared sources directly support the uncertainty and conservative recommendation."
+      }
+    },
+    {
+      "id": "SG-SXS-004",
+      "title_zh": "當參考答案本身也有漏洞",
+      "title_en": "Rejecting an Unsupported Reference Answer",
+      "scenario_type": "reference_challenge_and_business_qualification",
+      "user_request": "這個傳產客戶叫我下週直接做一個 Demo 給他看，但我現在不太想再免費做一堆東西。我希望先確認他到底有沒有預算跟真實需求，再決定投入多少時間。你覺得我要答應做 Demo 嗎？",
+      "sources": [
+        {
+          "source_id": "C1",
+          "type": "conversation",
+          "date": "2026-04-20",
+          "content": "我以前談案子很喜歡直接做東西給客戶看，我覺得 Prototype 做出來最快。"
+        },
+        {
+          "source_id": "C2",
+          "type": "conversation",
+          "date": "2026-08-14",
+          "content": "最近我開始覺得 B2B 高單價案不應該急著證明自己，最好先讓客戶講出具體問題，再投入工程資源。"
+        },
+        {
+          "source_id": "N1",
+          "type": "meeting_note",
+          "date": "current",
+          "content": "客戶說：「AI 感覺很有趣，你們下週能不能先做一版給我們看看？」尚未討論預算、採購流程、決策人、具體 KPI。"
+        },
+        {
+          "source_id": "N2",
+          "type": "sales_note",
+          "date": "current",
+          "content": "客戶目前只有老闆表達興趣，尚未確認實際使用部門。"
+        }
+      ],
+      "responses": {
+        "A": {
+          "text": "可以答應，但把 Demo 控制得非常小。客戶已經主動要求看 Demo，而你過去也很擅長用 Prototype 幫助對方理解。可以只花半天做一個簡單版本，用它換取下一次深入討論的機會。這樣既能維持客戶熱度，也不需要投入太多資源。",
+          "declared_sources": [
+            "C1",
+            "N1"
+          ]
+        },
+        "B": {
+          "text": "我不會立刻答應做 Demo。現在連預算、決策人、使用部門與具體問題都還沒確認，直接做東西很可能只是替「有興趣」買單。我會先回覆客戶：可以做，但希望先花 30 分鐘確認實際使用場景、現在怎麼處理、問題造成什麼成本，以及誰會決定是否採用。確認值得投入後，再決定 Demo 要做到什麼程度。",
+          "declared_sources": [
+            "C2",
+            "N1",
+            "N2"
+          ]
+        }
+      },
+      "reference_answer": {
+        "winner": "A",
+        "rationale": "客戶明確要求 Demo，而且 C1 顯示使用者擅長用 Prototype 推進銷售。半天的投入成本有限，能提高成交機率。"
+      },
+      "author_verdict": "B",
+      "author_reasoning_zh": "B 更接近可靠答案。當前需求與 C2 都明確要求先確認預算、真實需求與投入邊界，應優先於 C1 的舊習慣。N1 只證明客戶參與度與興趣高，不能證明購買意圖或商機成熟；預算、決策人、使用部門與 KPI 均未確認。B 沒有拒絕 Demo，而是先設一道資格門檻。參考答案則額外假設「半天成本有限」與「Demo 會提高成交率」，來源沒有支持。",
+      "rationale_en": "Response B is stronger because it distinguishes client interest from qualified buying intent. The current request and the newer preference both require a qualification step before engineering work, while the budget, decision-maker, user department, and KPI remain unknown. The reference answer relies on unsupported assumptions that half a day is a limited cost and that an early demo will improve conversion.",
+      "failure_tags": {
+        "A": [
+          "current_turn_ignored",
+          "stale_preference_overweighted",
+          "premature_commitment"
+        ],
+        "B": [],
+        "reference": [
+          "unsupported_assumption",
+          "interest_buying_intent_conflation"
+        ]
+      },
+      "source_audit": {
+        "A": "Declared sources exist, but C1 is stale relative to the current turn and C2; N1 supports interest, not qualification.",
+        "B": "Declared sources directly support the qualification gate.",
+        "reference": "The claimed cost and conversion benefits are not supported by the source bundle."
+      }
+    }
+  ]
+}

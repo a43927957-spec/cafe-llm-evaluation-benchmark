@@ -1,148 +1,138 @@
-# Gemini 繁體中文語意品質分析作品集
+# Traditional Chinese LLM Evaluation Portfolio  
+# 繁體中文大型語言模型評估作品集
 
-> 用真實 Gemini API Eval 證據，找出繁體中文裡會讓產品答反、答偏或漏答的語意失誤。
+> Source-grounded SxS judgment, Traditional Chinese semantic analysis, and reproducible evaluation artifacts.  
+> 以來源為依據的雙回答判斷、繁體中文語意分析，以及可重跑的評估產物。
 
-這份作品不是在證明「模型偶爾會犯錯」，而是在示範我會怎麼把一個中文 AI 失敗拆成可重現、可歸因、可修正的品質問題。
+這份作品集現在分成兩個核心證據層：
 
-主分析取自既有產品 Eval 的保存結果。測試提示皆為合成情境，不含真實顧客訊息；其中三案是可確認的 Gemini API 結構化輸出，另外三案是包含抽取、檢索、路由與 deterministic renderer 的端到端系統輸出。原始 artifact 沒有保存精確 Gemini model ID，所以本作品不猜測版本，也不把整個系統的錯誤都推給模型。
+1. **Source-Grounded SxS Evaluation（來源導向的雙回答評估）**：四個合成職務模擬案例，Winner 與核心理由由作者本人以繁體中文獨立完成。
+2. **Archived Gemini Product Evaluation（保存的 Gemini 產品評估）**：使用咖啡廳專案留下的真實推論產物，分析繁體中文否定、指涉、並列問句、限定詞與回答直接性等失敗。
 
-## 先看這三份
+## Start here（建議閱讀順序）
 
-- [完整繁體中文分析：六個案例、證據與根因](05-gemini-zh-semantics/analysis-zh.md)
-- [English key findings：只保留招聘者快速掃讀的結論](05-gemini-zh-semantics/key-findings-en.md)
-- [機器可讀案例、量化結果與來源雜湊](data/gemini_zh_semantics.json)
+- **主作品：** [四個作者親自判斷的 Source-Grounded SxS 案例](00-source-grounded-sxs/README.md)
+- **機器可讀版：** [Source-Grounded SxS JSON](data/source_grounded_sxs.json)
+- **真實產品證據：** [Gemini 繁體中文六個語意案例](05-gemini-zh-semantics/analysis-zh.md)
+- **English recruiter summary：** [Gemini English key findings](05-gemini-zh-semantics/key-findings-en.md)
+- **評估規則：** [Rubric 與診斷方法](rubric.md)
 
-## 我找到的中文語意問題
+## Core portfolio map（核心作品地圖）
 
-| 案例 | 使用者真正表達的意思 | 系統失誤 | 根因層 |
+| Track | Data type | What is human-judged | Main skills demonstrated |
 |---|---|---|---|
-| 不要太搶 | 咖啡感不要主導 | 抽成 coffee-forward，偏好方向相反 | 模型抽取 |
-| 那酒精的也算嗎 | 酒精飲品是否也適用上一輪折扣 | 被「酒精」關鍵字拉去安全領域 | 模型抽取 |
-| 沒選焙度會預設哪個 | 問上一輪商品的預設屬性 | 把「焙度」當成商品實體 | 模型抽取 |
-| 可以換嗎？要加價嗎？ | 更換資格與加價兩題都要回答 | 只保留 compatibility，遺失 surcharge | 語意表示 |
-| 大型犬可以坐哪裡 | 問體型限制與座位區域 | 只回通用寵物規則 | 證據覆蓋 |
-| 是不是一定都很酸 | 先回答「不一定」再解釋 | 有相關知識，卻沒回答是或不是 | 回答實現 |
+| Source-Grounded SxS | Synthetic role simulation | Winner and core reasoning for all 4 cases | Current-turn priority, recency, grounding, source weighting, risk calibration, Debug Info, reference challenge |
+| Gemini semantic audit | Synthetic prompts + archived real inference artifacts | Evidence boundaries, diagnoses, and case reasoning are inspectable | Negation, discourse reference, schema loss, qualifier coverage, answer directness |
+| Reproducible benchmark | Structured JSON + Python validation | Methods and outputs are auditable | Data validation, regression testing, attribution boundaries |
 
-## 最有代表性的一案
+## Source-Grounded SxS highlights（雙回答評估重點）
 
-使用者問：
+| Case | Decision | Key judgment |
+|---|:---:|---|
+| Current request vs stale coffee preference | A | 當前輪與近期直接陳述高於舊偏好；搜尋紀錄不能證明穩定意圖 |
+| Discovery before demo | B | 需求尚未收斂時，先問真實事件，避免 Demo 造成錨定 |
+| Knee-injury return to running | B | 走路不痛不等於能承受 5 公里；高風險情境提高證據門檻 |
+| Demo request with flawed reference answer | B | 客戶有興趣不等於已具購買意圖；參考答案的成本與轉換率假設無依據 |
 
-> 我喜歡奶味重一點、咖啡不要太搶，有哪杯？
+完整判斷與來源核對見 [00-source-grounded-sxs](00-source-grounded-sxs/README.md)。
 
-Gemini 保存輸出同時包含 milk_forward 與 coffee_forward。它抓到了奶味偏好，卻把「咖啡不要太搶」這個否定與程度限制翻成相反方向。
+## Gemini Traditional Chinese semantic audit（Gemini 繁體中文語意審查）
 
-這一案也暴露 benchmark 本身的問題：當時 expected frame 只用 creamy 近似，沒有明確的 low_coffee_intensity。成熟的 evaluator 不能只看模型和標準答案是否一致，還要問標準答案是否真的裝得下原句語意。
+主分析取自既有咖啡廳產品 Eval 保存結果。測試提示為合成情境，不含真實顧客訊息；其中三案是可確認的 Gemini API 結構化輸出，另外三案是包含抽取、檢索、路由與 deterministic renderer（確定性回覆器）的端到端系統輸出。
 
-## 量化證據
+原始 artifact 沒有保存精確 Gemini model ID，因此本作品不猜測版本，也不把整個系統的錯誤全部歸咎於模型。
 
-| 系統迭代階段 | 有效格式 | 完整 frame 相符 | 核心語意相符 |
+| Case | User meaning | Observed failure | Diagnosis layer |
+|---|---|---|---|
+| 咖啡不要太搶 | 咖啡感不要主導 | 抽成 `coffee_forward`，偏好方向相反 | Model extraction |
+| 那酒精的也算嗎 | 酒精飲品是否適用上一輪折扣 | 被「酒精」拉去 safety domain | Model extraction |
+| 沒選焙度會預設哪個 | 問上一輪商品的預設屬性 | 把焙度當成商品實體 | Model extraction |
+| 可以換嗎？要加價嗎？ | 更換資格與加價兩題都要回答 | 遺失 surcharge 子問題 | Semantic representation |
+| 大型犬可以坐哪裡 | 體型限制與座位區域 | 只回通用寵物規則 | Evidence coverage |
+| 是不是一定都很酸 | 先回答「不一定」 | 有知識但沒有回答是或不是 | Answer realization |
+
+### Iteration evidence（迭代證據）
+
+| System stage | Valid output | Exact frame | Core semantics |
 |---|---:|---:|---:|
-| 初始 30 題 × 3 次 | 27 / 90 | 15 / 90 | 27 / 90 |
-| canonical prompt 後 | 72 / 90 | 45 / 90 | 63 / 90 |
-| Query Frame v2，30 題 × 3 次 | 90 / 90 | 90 / 90 | 90 / 90 |
-| Query Frame v2，完整 96 題 | 96 / 96 | 86 / 96 | 96 / 96 |
+| Initial 30 prompts × 3 runs | 27 / 90 | 15 / 90 | 27 / 90 |
+| After canonical prompt revision | 72 / 90 | 45 / 90 | 63 / 90 |
+| Query Frame v2, 30 × 3 | 90 / 90 | 90 / 90 | 90 / 90 |
+| Query Frame v2, full 96 | 96 / 96 | 86 / 96 | 96 / 96 |
 
-這是 prompt、schema 與受控上下文一起調整後的系統迭代，不是 Gemini 模型版本比較。
+這些數字描述 prompt、schema 與受控上下文一起調整後的系統迭代，不是 Gemini 模型版本比較。
 
-即使最終結構化抽取明顯改善，端到端產品門檻仍是 NO-GO：
+端到端產品 gate 仍為 **NO-GO**：
 
 - 96 題中只有 46 題產生顧客可見回覆，50 題沉默。
 - 34 題具備可回答條件，但只有 26 題真的回答。
 - 至少 5 題仍有必要限定條件未被證據覆蓋。
 
-我的結論是：frame exact 不能代表產品可上線。還要驗證可回答性、限定詞覆蓋、回答直接性，以及每一個明問子句是否真的有著落。
+核心結論是：**frame exact（結構完全相符）不等於產品可上線。** 還必須檢查可回答性、限定詞覆蓋、回答直接性，以及每個明問子句是否真正有著落。
 
-## 我的評估方法
+## Evaluation method（評估方法）
 
-1. 命題與極性：保留肯定、否定、程度副詞與條件。
-2. 指涉與語篇：確認省略、那個、也算嗎綁到正確前文。
-3. 子問題完整性：每個明問子句都有答案、釐清或轉接。
-4. 限定條件覆蓋：尺寸、區域、時段、對象與例外都要有證據。
-5. 直接性與自然度：是非問句先回答極性，疑問詞問題回答真正焦點。
-6. 根因歸屬：分清模型抽取、語意表示、證據覆蓋與回答實現。
+1. **Current-turn priority（當前輪優先）**：目前的明確要求高於歷史偏好。
+2. **Recency with relevance（新近性與相關性）**：較新資料通常優先，但必須真的能控制當前結論。
+3. **Proposition and polarity（命題與極性）**：保留肯定、否定、程度與條件方向。
+4. **Reference and discourse（指涉與語篇）**：確認「那個」「也算嗎」等省略形式綁到正確前文。
+5. **Sub-question coverage（子問題覆蓋）**：每個明問子句都有答案、釐清或轉接。
+6. **Evidence threshold（證據門檻）**：健康、安全與不可逆決策需要更保守的結論。
+7. **Attribution boundary（歸因邊界）**：區分模型抽取、schema、檢索、證據與 renderer。
+8. **Reference audit（參考答案審查）**：標準答案本身若加入無依據假設，也應被推翻。
 
-完整規則見 [評分與診斷規則](rubric.md)。
+## Repository structure（倉庫結構）
 
-## 作品規模
+```text
+00-source-grounded-sxs/
+  README.md
 
-| 主題 | 案例或執行數 | 用途 |
-|---|---:|---|
-| Gemini 中文深度案例 | 6 | 逐案證據、語意判讀、根因與修正 |
-| Query Frame 迭代紀錄 | 366 次執行 | 比較有效格式、完整 frame 與核心語意 |
-| 端到端產品 gate | 96 題 | 防止把抽取通過誤當成產品通過 |
-| 個人化回答 SxS | 10 案 | 補充展示來源歸屬、自然度與 Debug Info |
-| 咖啡廳有依據回答 | 12 案 | 補充展示 grounding、安全與政策判斷 |
+05-gemini-zh-semantics/
+  analysis-zh.md
+  key-findings-en.md
 
-## 支援作品
+04-personalization-sxs/            # Legacy synthetic supporting track
+03-cafe-llm-benchmark/             # Legacy synthetic supporting track
+02-hallucination-analysis/
+01-response-comparison/
 
-主作品以 Gemini 中文語意為核心；原有兩條合成評估軌保留作為補充，展示不同面向的 evaluator 能力。
+data/
+  source_grounded_sxs.json
+  gemini_zh_semantics.json
+  personalization_sxs.json
+  evaluations.json
 
-### 個人化回答 SxS
+src/
+  semantic_audit.py
+  score.py
 
-比較一至五輪回答中的事實依據、來源整合、實用性、自然度、個人化克制與來源可追溯性。
+tests/
+  test_semantic_audit.py
+  test_score.py
 
-- [評估流程](04-personalization-sxs/evaluation-protocol.md)
-- [五個完整案例](04-personalization-sxs/case-studies.md)
-- [結果與發現](04-personalization-sxs/evaluation-results.md)
-- [Debug Info 核對清單](04-personalization-sxs/debug-info-checklist.md)
-- [資料清理流程](04-personalization-sxs/data-hygiene.md)
-- [機器可讀資料集](data/personalization_sxs.json)
+rubric.md
+```
 
-### 有依據的客服回答
+## Reproduce and validate（重跑與驗證）
 
-比較政策例外、無依據宣稱、上下文、過敏風險、隱私、時效與台灣在地用語。
+只需 Python 3.10 以上，不需第三方套件：
 
-- [三個完整比較](01-response-comparison/case-studies.md)
-- [幻覺與失敗類型](02-hallucination-analysis/failure-taxonomy.md)
-- [基準設計](03-cafe-llm-benchmark/benchmark-design.md)
-- [評估結果](03-cafe-llm-benchmark/evaluation-results.md)
-- [產品改善建議](03-cafe-llm-benchmark/recommendations.md)
+```bash
+python3 src/semantic_audit.py
+python3 src/score.py
+python3 -m unittest discover -s tests -v
+```
 
-## 倉庫結構
+## Data and provenance（資料與來源說明）
 
-    05-gemini-zh-semantics/
-      analysis-zh.md
-      key-findings-en.md
-    04-personalization-sxs/
-    03-cafe-llm-benchmark/
-    02-hallucination-analysis/
-    01-response-comparison/
-    data/
-      gemini_zh_semantics.json
-      personalization_sxs.json
-      evaluations.json
-    src/
-      semantic_audit.py
-      score.py
-    tests/
-      test_semantic_audit.py
-      test_score.py
-    rubric.md
-
-## 重跑與驗證
-
-只需要 Python 3.10 以上版本，不需安裝第三方套件。
-
-    python3 src/semantic_audit.py
-    python3 src/score.py
-    python3 -m unittest discover -s tests -v
-
-驗證器會檢查案例結構、來源雜湊、provider 歸因、中文完整分析、英文長度、根因分層、量化數字與隱私邊界。
-
-## 資料、隱私與製作方式
-
-- Gemini 中文主分析使用真實保存的推論輸出，但所有測試提示都是合成案例。
+- Source-Grounded SxS 的情境、來源、對話與回答全部為合成資料，不是任何公司的專有 assessment。
+- 四個新案例的 Winner 與核心理由由作者本人完成；英文摘要與術語標籤只是同一判斷的結構化呈現。
+- Gemini 語意主軌使用真實保存的推論輸出，但輸入提示仍是合成測試案例。
 - 不含真實顧客訊息、正式環境對話、API key、token 或可辨識店家資料。
-- 公開資料只保留診斷需要的最小欄位，並以報告名稱、時間與 SHA-256 記錄來源。
-- 舊有個人化與客服回答軌的身分、帳號活動、搜尋、觀看紀錄、政策及候選回答全部為合成資料。
-- 這是 AI 工具協助整理的自建作品，不是過往付費標註工作，也不是官方 Gemini benchmark。
+- 公開資料只保留診斷所需的最小欄位。
+- `04-personalization-sxs` 與早期咖啡廳合成軌暫時保留作為 legacy supporting material（舊版輔助材料），**不計入四個作者親自盲審的核心案例**。
+- 本作品不是官方 Gemini benchmark，也不是過往付費標註工作的冒充。
 
-AI 協助資料整理、程式碼、格式與英文校訂；案例判讀、證據邊界與是否通過的理由保留為可檢查內容。面試時應以作者能親自解釋、接受反例與重新判分的內容為準。
+## English summary
 
-## 語言說明
-
-完整判讀以繁體中文撰寫，因為否定、程度、指涉、語用與台灣在地表達必須由能直接理解該語言的人評估。英文只用於欄位名稱、必要術語與招聘者快速閱讀的重點摘要；本作品不以英文篇幅假裝作者具備未主張的流利程度。
-
-## English summary（AI-assisted）
-
-This portfolio audits real archived Gemini API evaluation outputs with synthetic Traditional Chinese prompts. It identifies failures in negation, discourse reference, entity typing, coordinated questions, qualifier coverage, and direct answer realization. The exact Gemini model ID was not recorded, and end-to-end system replies are not presented as direct Gemini quotes.
+This portfolio combines four author-judged, source-grounded pairwise evaluation exercises with archived Gemini product-evaluation evidence. The SxS track demonstrates current-turn priority, recency handling, weak-signal restraint, risk calibration, source auditing, and the ability to reject an unsupported reference answer. The Gemini track analyzes real saved inference artifacts while preserving clear boundaries between direct model outputs and end-to-end system behavior.
