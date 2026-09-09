@@ -6,19 +6,22 @@
     "version": "1.0",
     "case_count": 4,
     "data_status": "synthetic_role_simulation",
-    "authorship": {
-      "case_and_candidate_generation": "AI-generated role-simulation material",
-      "winner_and_core_reasoning": "independently judged by the author in Traditional Chinese before formatting",
-      "structure_terminology_and_english": "AI-assisted",
-      "disclosure": "These are not proprietary employer assessment items and are not production-user data."
-    },
     "evaluation_principles": [
       "Current-turn instructions outrank historical preferences.",
       "Recent direct statements usually outrank older direct statements when both are relevant.",
       "Behavioral traces are weak signals and should not be treated as proof of intent.",
       "High-risk decisions require stronger evidence and calibrated uncertainty.",
       "Reference answers remain auditable and may be rejected when their assumptions are unsupported."
-    ]
+    ],
+    "provenance": {
+      "scenario_data": "synthetic role-simulation material",
+      "winner_and_core_reasoning": "independently judged by the author in Traditional Chinese",
+      "presentation": "English rationales, failure tags, and source audits are structured representations of the same author judgment",
+      "not_claimed_as": [
+        "proprietary employer assessment items",
+        "production-user data"
+      ]
+    }
   },
   "cases": [
     {
@@ -72,8 +75,8 @@
       },
       "author_verdict": "A",
       "author_reasoning_zh": "A 優先遵守使用者當前明確說出的「下午不太想喝咖啡」，並以較新的 C2 支持避免咖啡因；K1 也能實際降低交通成本。B 讓舊偏好 C1 覆蓋當前需求，還把一次 24 小時咖啡廳搜尋推論成長時間停留偏好，最後推薦淺焙手沖，直接踩中使用者當前限制。",
-      "rationale_en_ai_assisted": "Response A is better because it follows the user's current request and the more recent caffeine-avoidance evidence, while using the calendar location to reduce travel friction. Response B overweights an older coffee preference and turns a single search into an unsupported long-stay preference. Its final recommendation directly conflicts with the user's stated wish to avoid coffee that afternoon.",
-      "failure_tags_ai_assisted": {
+      "rationale_en": "Response A is better because it follows the user's current request and the more recent caffeine-avoidance evidence, while using the calendar location to reduce travel friction. Response B overweights an older coffee preference and turns a single search into an unsupported long-stay preference. Its final recommendation directly conflicts with the user's stated wish to avoid coffee that afternoon.",
+      "failure_tags": {
         "A": [],
         "B": [
           "current_turn_ignored",
@@ -81,7 +84,7 @@
           "unsupported_inference"
         ]
       },
-      "source_audit_ai_assisted": {
+      "source_audit": {
         "A": "Declared sources exist and directly support the location and caffeine claims.",
         "B": "Declared sources exist, but S1 does not prove a stable long-stay preference and C1 should not override the current turn and C2."
       }
@@ -124,8 +127,8 @@
       },
       "author_verdict": "B",
       "author_reasoning_zh": "B 更符合使用者已更新的 B2B 方法：C2 應高於較舊的 C1。N1 也明確顯示需求、資料與問題邊界都尚未收斂；先展示功能容易讓客戶被既有選項錨定，得到供應商引導出的答案。B 先要求一個具體失敗事件，再決定是否展示對應 Demo，決策邏輯更可靠。",
-      "rationale_en_ai_assisted": "Response B better reflects the user's updated B2B approach and the client's unresolved problem definition. A feature-first demo could anchor the client to the supplier's examples and produce a shaped answer rather than a genuine need. Asking for a concrete recent failure creates a stronger basis for any later demo.",
-      "failure_tags_ai_assisted": {
+      "rationale_en": "Response B better reflects the user's updated B2B approach and the client's unresolved problem definition. A feature-first demo could anchor the client to the supplier's examples and produce a shaped answer rather than a genuine need. Asking for a concrete recent failure creates a stronger basis for any later demo.",
+      "failure_tags": {
         "A": [
           "stale_preference_overweighted",
           "anchoring_risk",
@@ -133,7 +136,7 @@
         ],
         "B": []
       },
-      "source_audit_ai_assisted": {
+      "source_audit": {
         "A": "The original exercise did not include declared Debug Info; source use is inferred and source traceability is not scored.",
         "B": "The original exercise did not include declared Debug Info; source use is inferred and source traceability is not scored."
       }
@@ -183,8 +186,8 @@
       },
       "author_verdict": "B",
       "author_reasoning_zh": "B 較好。H1 是目前最能限制結論的證據：走路不痛不能證明能承受連續 5 公里跑步，而缺少診斷、復健完成證明與跑步測試時，模型不應給出接近放行的結論。C1 只證明受傷前的能力，與受傷後的安全起始量沒有直接關係，因此在當前決策中應降低權重。",
-      "rationale_en_ai_assisted": "Response B is better because pain-free walking does not establish readiness for repeated five-kilometer runs after a knee injury. The older training history describes prior capacity, not current load tolerance. In a health-risk context with missing clinical and functional evidence, the answer should remain conservative and explicitly acknowledge uncertainty.",
-      "failure_tags_ai_assisted": {
+      "rationale_en": "Response B is better because pain-free walking does not establish readiness for repeated five-kilometer runs after a knee injury. The older training history describes prior capacity, not current load tolerance. In a health-risk context with missing clinical and functional evidence, the answer should remain conservative and explicitly acknowledge uncertainty.",
+      "failure_tags": {
         "A": [
           "evidence_overreach",
           "historical_capability_misapplied",
@@ -192,7 +195,7 @@
         ],
         "B": []
       },
-      "source_audit_ai_assisted": {
+      "source_audit": {
         "A": "The sources are real and traceable, but the answer overextends what C1 and H1 can support.",
         "B": "Declared sources directly support the uncertainty and conservative recommendation."
       }
@@ -252,8 +255,8 @@
       },
       "author_verdict": "B",
       "author_reasoning_zh": "B 更接近可靠答案。當前需求與 C2 都明確要求先確認預算、真實需求與投入邊界，應優先於 C1 的舊習慣。N1 只證明客戶參與度與興趣高，不能證明購買意圖或商機成熟；預算、決策人、使用部門與 KPI 均未確認。B 沒有拒絕 Demo，而是先設一道資格門檻。參考答案則額外假設「半天成本有限」與「Demo 會提高成交率」，來源沒有支持。",
-      "rationale_en_ai_assisted": "Response B is stronger because it distinguishes client interest from qualified buying intent. The current request and the newer preference both require a qualification step before engineering work, while the budget, decision-maker, user department, and KPI remain unknown. The reference answer relies on unsupported assumptions that half a day is a limited cost and that an early demo will improve conversion.",
-      "failure_tags_ai_assisted": {
+      "rationale_en": "Response B is stronger because it distinguishes client interest from qualified buying intent. The current request and the newer preference both require a qualification step before engineering work, while the budget, decision-maker, user department, and KPI remain unknown. The reference answer relies on unsupported assumptions that half a day is a limited cost and that an early demo will improve conversion.",
+      "failure_tags": {
         "A": [
           "current_turn_ignored",
           "stale_preference_overweighted",
@@ -265,7 +268,7 @@
           "interest_buying_intent_conflation"
         ]
       },
-      "source_audit_ai_assisted": {
+      "source_audit": {
         "A": "Declared sources exist, but C1 is stale relative to the current turn and C2; N1 supports interest, not qualification.",
         "B": "Declared sources directly support the qualification gate.",
         "reference": "The claimed cost and conversion benefits are not supported by the source bundle."
