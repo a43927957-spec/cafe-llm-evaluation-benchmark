@@ -2,7 +2,7 @@
 # 來源導向的雙回答評估
 
 > Four synthetic role-simulation cases independently judged by the author before professional formatting.  
-> 四個合成職務模擬案例；勝負與核心理由由作者先以繁體中文獨立判斷，再由 AI 協助結構化、術語映射與英文校訂。
+> 四個合成職務模擬案例；勝負與核心理由由作者以繁體中文獨立完成。
 
 ## Purpose（目的）
 
@@ -10,11 +10,11 @@
 
 The cases test source-grounded pairwise evaluation: current-turn priority, recency, weak behavioral signals, risk calibration, source traceability, and reference-answer challenge.
 
-## Evidence and authorship disclosure（證據與製作說明）
+## Scope and provenance（範圍與來源說明）
 
 - 所有情境、來源、對話與候選回答都是 **synthetic（合成資料）**，不是正式工作資料、真實顧客資料或任何公司的專有測驗。
-- 練習題與候選回答由 AI 生成；**Winner 與核心 reasoning（勝負與核心判斷）由作者本人先行完成。**
-- AI 後續只協助整理版面、映射 evaluator terminology（評估術語）與英文校訂。
+- **Winner 與核心 reasoning（勝負與核心判斷）由作者本人以繁體中文獨立完成。**
+- 英文理由、錯誤標籤與來源核對，是對同一份作者判斷的結構化呈現。
 - Case 2 的原始練習沒有提供 Debug Info，因此不補造來源宣稱，也不評 Source Traceability（來源可追溯性）。
 - 沒有為了讓結果好看而強制安排 A/B 各半，也沒有預設 Reference Answer 必然正確。
 
@@ -72,16 +72,16 @@ The cases test source-grounded pairwise evaluation: current-turn priority, recen
 
 A 優先遵守使用者當前明確說出的「下午不太想喝咖啡」，並以較新的 C2 支持避免咖啡因；K1 也能實際降低交通成本。B 讓舊偏好 C1 覆蓋當前需求，還把一次 24 小時咖啡廳搜尋推論成長時間停留偏好，最後推薦淺焙手沖，直接踩中使用者當前限制。
 
-### Recruiter-facing English rationale（AI-assisted）
+### Recruiter-facing English rationale
 
 Response A is better because it follows the user's current request and the more recent caffeine-avoidance evidence, while using the calendar location to reduce travel friction. Response B overweights an older coffee preference and turns a single search into an unsupported long-stay preference. Its final recommendation directly conflicts with the user's stated wish to avoid coffee that afternoon.
 
-### Failure tags（AI-assisted terminology）
+### Failure tags
 
 - **A:** None
 - **B:** `current_turn_ignored`, `recency_mismatch`, `unsupported_inference`
 
-### Source audit（AI-assisted）
+### Source audit
 
 - **A:** Declared sources exist and directly support the location and caffeine claims.
 - **B:** Declared sources exist, but S1 does not prove a stable long-stay preference and C1 should not override the current turn and C2.
@@ -123,16 +123,16 @@ Response A is better because it follows the user's current request and the more 
 
 B 更符合使用者已更新的 B2B 方法：C2 應高於較舊的 C1。N1 也明確顯示需求、資料與問題邊界都尚未收斂；先展示功能容易讓客戶被既有選項錨定，得到供應商引導出的答案。B 先要求一個具體失敗事件，再決定是否展示對應 Demo，決策邏輯更可靠。
 
-### Recruiter-facing English rationale（AI-assisted）
+### Recruiter-facing English rationale
 
 Response B better reflects the user's updated B2B approach and the client's unresolved problem definition. A feature-first demo could anchor the client to the supplier's examples and produce a shaped answer rather than a genuine need. Asking for a concrete recent failure creates a stronger basis for any later demo.
 
-### Failure tags（AI-assisted terminology）
+### Failure tags
 
 - **A:** `stale_preference_overweighted`, `anchoring_risk`, `premature_solutioning`
 - **B:** None
 
-### Source audit（AI-assisted）
+### Source audit
 
 - **A:** The original exercise did not include declared Debug Info; source use is inferred and source traceability is not scored.
 - **B:** The original exercise did not include declared Debug Info; source use is inferred and source traceability is not scored.
@@ -174,16 +174,16 @@ Response B better reflects the user's updated B2B approach and the client's unre
 
 B 較好。H1 是目前最能限制結論的證據：走路不痛不能證明能承受連續 5 公里跑步，而缺少診斷、復健完成證明與跑步測試時，模型不應給出接近放行的結論。C1 只證明受傷前的能力，與受傷後的安全起始量沒有直接關係，因此在當前決策中應降低權重。
 
-### Recruiter-facing English rationale（AI-assisted）
+### Recruiter-facing English rationale
 
 Response B is better because pain-free walking does not establish readiness for repeated five-kilometer runs after a knee injury. The older training history describes prior capacity, not current load tolerance. In a health-risk context with missing clinical and functional evidence, the answer should remain conservative and explicitly acknowledge uncertainty.
 
-### Failure tags（AI-assisted terminology）
+### Failure tags
 
 - **A:** `evidence_overreach`, `historical_capability_misapplied`, `high_risk_overconfidence`
 - **B:** None
 
-### Source audit（AI-assisted）
+### Source audit
 
 - **A:** The sources are real and traceable, but the answer overextends what C1 and H1 can support.
 - **B:** Declared sources directly support the uncertainty and conservative recommendation.
@@ -232,17 +232,17 @@ Response B is better because pain-free walking does not establish readiness for 
 
 B 更接近可靠答案。當前需求與 C2 都明確要求先確認預算、真實需求與投入邊界，應優先於 C1 的舊習慣。N1 只證明客戶參與度與興趣高，不能證明購買意圖或商機成熟；預算、決策人、使用部門與 KPI 均未確認。B 沒有拒絕 Demo，而是先設一道資格門檻。參考答案則額外假設「半天成本有限」與「Demo 會提高成交率」，來源沒有支持。
 
-### Recruiter-facing English rationale（AI-assisted）
+### Recruiter-facing English rationale
 
 Response B is stronger because it distinguishes client interest from qualified buying intent. The current request and the newer preference both require a qualification step before engineering work, while the budget, decision-maker, user department, and KPI remain unknown. The reference answer relies on unsupported assumptions that half a day is a limited cost and that an early demo will improve conversion.
 
-### Failure tags（AI-assisted terminology）
+### Failure tags
 
 - **A:** `current_turn_ignored`, `stale_preference_overweighted`, `premature_commitment`
 - **B:** None
 - **reference:** `unsupported_assumption`, `interest_buying_intent_conflation`
 
-### Source audit（AI-assisted）
+### Source audit
 
 - **A:** Declared sources exist, but C1 is stale relative to the current turn and C2; N1 supports interest, not qualification.
 - **B:** Declared sources directly support the qualification gate.
