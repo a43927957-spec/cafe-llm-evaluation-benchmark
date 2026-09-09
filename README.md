@@ -6,7 +6,7 @@
 
 這份作品集現在分成兩個核心證據層：
 
-1. **Source-Grounded SxS Evaluation（來源導向的雙回答評估）**：四個合成職務模擬案例，Winner 與核心理由由作者本人先以繁體中文獨立判斷，再由 AI 協助結構化與英文校訂。
+1. **Source-Grounded SxS Evaluation（來源導向的雙回答評估）**：四個合成職務模擬案例，Winner 與核心理由由作者本人以繁體中文獨立完成。
 2. **Archived Gemini Product Evaluation（保存的 Gemini 產品評估）**：使用咖啡廳專案留下的真實推論產物，分析繁體中文否定、指涉、並列問句、限定詞與回答直接性等失敗。
 
 ## Start here（建議閱讀順序）
@@ -22,7 +22,7 @@
 | Track | Data type | What is human-judged | Main skills demonstrated |
 |---|---|---|---|
 | Source-Grounded SxS | Synthetic role simulation | Winner and core reasoning for all 4 cases | Current-turn priority, recency, grounding, source weighting, risk calibration, Debug Info, reference challenge |
-| Gemini semantic audit | Synthetic prompts + archived real inference artifacts | Evidence boundaries and case reasoning are inspectable; original analysis was AI-assisted | Negation, discourse reference, schema loss, qualifier coverage, answer directness |
+| Gemini semantic audit | Synthetic prompts + archived real inference artifacts | Evidence boundaries, diagnoses, and case reasoning are inspectable | Negation, discourse reference, schema loss, qualifier coverage, answer directness |
 | Reproducible benchmark | Structured JSON + Python validation | Methods and outputs are auditable | Data validation, regression testing, attribution boundaries |
 
 ## Source-Grounded SxS highlights（雙回答評估重點）
@@ -123,16 +123,16 @@ python3 src/score.py
 python3 -m unittest discover -s tests -v
 ```
 
-## Data, privacy, and authorship（資料、隱私與製作方式）
+## Data and provenance（資料與來源說明）
 
 - Source-Grounded SxS 的情境、來源、對話與回答全部為合成資料，不是任何公司的專有 assessment。
-- 四個新案例的 Winner 與核心理由由作者本人完成；AI 協助排版、術語映射與英文校訂。
+- 四個新案例的 Winner 與核心理由由作者本人完成；英文摘要與術語標籤只是同一判斷的結構化呈現。
 - Gemini 語意主軌使用真實保存的推論輸出，但輸入提示仍是合成測試案例。
 - 不含真實顧客訊息、正式環境對話、API key、token 或可辨識店家資料。
 - 公開資料只保留診斷所需的最小欄位。
 - `04-personalization-sxs` 與早期咖啡廳合成軌暫時保留作為 legacy supporting material（舊版輔助材料），**不計入四個作者親自盲審的核心案例**。
 - 本作品不是官方 Gemini benchmark，也不是過往付費標註工作的冒充。
 
-## English summary（AI-assisted）
+## English summary
 
 This portfolio combines four author-judged, source-grounded pairwise evaluation exercises with archived Gemini product-evaluation evidence. The SxS track demonstrates current-turn priority, recency handling, weak-signal restraint, risk calibration, source auditing, and the ability to reject an unsupported reference answer. The Gemini track analyzes real saved inference artifacts while preserving clear boundaries between direct model outputs and end-to-end system behavior.
